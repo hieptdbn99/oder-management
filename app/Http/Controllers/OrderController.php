@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Order;
+use App\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -26,6 +28,10 @@ class OrderController extends Controller
     public function create()
     {
         //
+
+        $products = Product::all();
+
+        return view('order.ordercreate',['products'=>$products]);
     }
 
     /**
@@ -37,12 +43,14 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-        $customer = new Customer();
-        $customer->name = $request->name;
-        $customer->phone = $request->phone;
-        $customer->email = $request->email;
-        $customer->address = $request->address;
-        $customer->save();
+       
+        $order = new Order();
+        
+        $order->namecustomer = $request->name;
+        $order->phone = $request->phone;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->save();
     }
 
     /**
