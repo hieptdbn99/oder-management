@@ -8,7 +8,7 @@
             </div>
             <div class="col-sm-12">
              <!-- form thêm đơn hàng -->
-                <form action="" id="add-order-form" data-url="{{ route('order.store') }}" method="POST">
+                <form action="{{route('order.store')}}" id="add-order-form" data-url="{{ route('order.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="">Họ và tên khách hàng</label>
@@ -69,8 +69,18 @@
     </div>
     <script type="text/javascript">
     var arrayProduct = [];
+    var product = {
+          name: document.getElementById('select-product'),
+          quantity: document.getElementById('input-qty'),
+          price:document.getElementById('input-price'),
+
+          total: function() {
+            total = parseInt(this.price)*parseInt(this.quantity);
+            return total;
+          }
+        }   
     function addProduct(){
-        var product = {
+      var product = {
           name: document.getElementById('select-product').value,
           quantity: document.getElementById('input-qty').value,
           price:document.getElementById('input-price').value,
@@ -79,21 +89,21 @@
             total = parseInt(this.price)*parseInt(this.quantity);
             return total;
           }
-        }
+        }   
         arrayProduct.push(product);
         var listProduct = document.getElementById('render-product')
-        listProduct.innerHTML += '<td>'+product.name+'</td><td>'+product.quantity+'</td><td>'+product.price+'</td><td>'+product.total()+'</td></tr>'
-       
-        console.log(arrayProduct)
+        listProduct.innerHTML += '<td>'+product.name+'</td><td>'+product.quantity+'</td><td>'+product.price+'</td><td>'+product.total()+'</td></tr>' 
+        localStorage.setItem("my_product", JSON.stringify(arrayProduct))
     }
-    
-
 
 
         $(document).ready(function(){
           $('#add-order-form').submit(function(e){
-            e.preventDefault();
+            // e.preventDefault();
             var url = $(this).attr('data-url');
+            list = JSON.parse(localStorage.getItem("my_product"))
+            console.log(list)
+            localStorage.clear();
             $.ajax({
               headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -101,17 +111,18 @@
               type:'post',
               url: url,
               data:{
-                  listProduct: arrayProduct,
+                  list: JSON.stringify(list),
                   name: $('#input-name').val(),
                   phone: $('#input-phone').val(),
                   email: $('#input-email').val(),
                   address:$('#input-address').val(),
               },
-              success: function(response){
-                alert('Thêm mới thành công')
+              success: function(data){
+                console.log('Done!')
+                
               },
               error: function(){
-                console.log(listProduct)
+                console.log('Fail')
               }
       
             })

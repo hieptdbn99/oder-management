@@ -43,14 +43,16 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-       
+        // dd($request->name);
         $order = new Order();
-        
-        $order->namecustomer = $request->name;
-        $order->phone = $request->phone;
-        $order->email = $request->email;
-        $order->address = $request->address;
-        $order->save();
+        var_dump($request->list);
+        // $order->avatar=$request->listProduct;
+        // $order->avatar = $request->list;
+        // $order->namecustomer = $request->name;
+        // $order->phone = $request->phone;
+        // $order->email = $request->email;
+        // $order->address = $request->address;
+        // $order->save();
     }
 
     /**
