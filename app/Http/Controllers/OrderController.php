@@ -17,7 +17,10 @@ class OrderController extends Controller
     public function index()
     {
         //
-        return view('order.orderlist');
+        $products = Product::all();
+
+        return view('order.orderlist',['products'=>$products]);
+       
     }
 
     /**
@@ -29,9 +32,7 @@ class OrderController extends Controller
     {
         //
 
-        $products = Product::all();
-
-        return view('order.ordercreate',['products'=>$products]);
+      
     }
 
     /**
@@ -43,17 +44,26 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-        // dd($request->name);
+      
+      
         $order = new Order();
-        var_dump($request->list);
-        // $order->avatar=$request->listProduct;
-        // $order->avatar = $request->list;
-        // $order->namecustomer = $request->name;
-        // $order->phone = $request->phone;
-        // $order->email = $request->email;
-        // $order->address = $request->address;
-        // $order->save();
+        // But dd request null
+       // dd($request->all())
+        
+        $order->namecustomer = $request->name;
+        $order->phone = $request->phone;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->save();
+        // $listProduct = $request->json()->all();
+        // foreach($listProduct as $product){
+        //     $productDB =  Product::where('name', $product->name)->get();
+        //     $order->product()->attach($productDB);
+        // }
+        
+    
     }
+   
 
     /**
      * Display the specified resource.

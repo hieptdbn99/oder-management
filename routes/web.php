@@ -18,3 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('order', 'OrderController');
+Route::post('order/getorder', 'OrderController@getOrder')->name('getorder');
