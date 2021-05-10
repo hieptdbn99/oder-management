@@ -6,6 +6,7 @@ use App\Customer;
 use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -46,20 +47,18 @@ class OrderController extends Controller
         //
       
       
-        $order = new Order();
-        // But dd request null
-       // dd($request->all())
-        
-        $order->namecustomer = $request->name;
-        $order->phone = $request->phone;
-        $order->email = $request->email;
-        $order->address = $request->address;
-        $order->save();
-        // $listProduct = $request->json()->all();
-        // foreach($listProduct as $product){
-        //     $productDB =  Product::where('name', $product->name)->get();
-        //     $order->product()->attach($productDB);
-        // }
+    //     $order = new Order();
+    //     But dd request null
+    //    dd($request->all())............................
+       
+       $input = $request->all();
+       dd($input);
+        // $order->namecustomer = $request->name;
+        // $order->phone = $request->phone;
+        // $order->email = $request->email;
+        // $order->address = $request->address;
+        // $order->save();
+       
         
     
     }

@@ -62,32 +62,32 @@
           @csrf
           <div class="form-group">
               <label for="">Họ và tên khách hàng</label>
-              <input type="text" class="form-control" id="input-name">
+              <input type="text" name="name" class="form-control" id="input-name">
           </div>
           <div class="form-group">
               <label for="">Email</label>
-              <input type="email" class="form-control" id="input-email">
+              <input type="email" name="email" class="form-control" id="input-email">
           </div>
           <div class="form-group">
               <label for="">Số điện thoại</label>
-              <input type="text" class="form-control" id="input-phone">
+              <input type="text" name="phone" class="form-control" id="input-phone">
           </div>
           <div class="form-group">
               <label for="">Địa chỉ</label>
-              <input type="text" class="form-control" id="input-address">
+              <input type="text" name="address" class="form-control" id="input-address">
           </div>
           <div class="form-group">
               <label for="" class="d-block">Sản phẩm</label>
-              <select class="form-select" id="select-product" aria-label="Default select example">
+              <select class="form-select" id="select-product" name="product_name[]" aria-label="Default select example">
                   @foreach ($products as $product)
-                  <option value={{$product->name}}>{{$product->name}}</option> 
+                  <option value={{$product->name}} >{{$product->name}}</option> 
                   @endforeach
                   
                   
               </select>
-              <input aria-label="quantity" id="input-qty" min="1" type="number" value="1">
-              <input id="input-price" type="text">
-              <a onclick="event.preventDefault(); addProduct()"><i class="fas fa-plus-square"></i></a>
+              <input aria-label="quantity" name="product_qty[]" id="input-qty" min="1" type="number" value="1">
+              <input id="input-price" name="product_price[]" type="text">
+              <a type="submit" href = "" name="list" class="addListPro"><i class="fas fa-plus-square"></i></a>
         
         
         
@@ -120,76 +120,5 @@
     </div>
   </div>
   </div>
-
-<script type="text/javascript">
-  var arrayProduct = [];
-  var product = {
-        name: document.getElementById('select-product'),
-        quantity: document.getElementById('input-qty'),
-        price:document.getElementById('input-price'),
-
-        total: function() {
-          total = parseInt(this.price)*parseInt(this.quantity);
-          return total;
-        }
-      }   
-  function addProduct(){
-    var product = {
-        name: document.getElementById('select-product').value,
-        quantity: document.getElementById('input-qty').value,
-        price:document.getElementById('input-price').value,
-
-        total: function() {
-          total = parseInt(this.price)*parseInt(this.quantity);
-          return total;
-        }
-      }   
-      arrayProduct.push(product);
-      var listProduct = document.getElementById('render-product')
-      listProduct.innerHTML += '<td>'+product.name+'</td><td>'+product.quantity+'</td><td>'+product.price+'</td><td>'+product.total()+'</td></tr>' 
-      localStorage.setItem("my_product", JSON.stringify(arrayProduct))
-  }
-
-
-      $(document).ready(function(){
-        $('#add-order-form').submit(function(e){
-          // e.preventDefault();
-          // chuyển đến router.store
-
-          var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-          var url = $(this).attr('data-url');
-          list = JSON.parse(localStorage.getItem("my_product"))
-          console.log(list)
-          localStorage.clear();
-          $.ajax({
-            headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-            type:'post',
-            url: url,
-            data:{
-                list: JSON.stringify(list),
-                name: $('#input-name').val(),
-                phone: $('#input-phone').val(),
-                email: $('#input-email').val(),
-                address:$('#input-address').val(),
-                _token: CSRF_TOKEN,
-            },
-            
-            success: function(respone){
-              alert('Thêm mới thành công')
-              $('#addOrderModal').modal('hide');
-              
-            },
-            error: function(){
-              console.log('Fail')
-            }
-    
-          })
-        })
-      })
-    </script>
-
-
 @endsection
 
