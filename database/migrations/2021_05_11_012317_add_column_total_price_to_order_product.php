@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
+class AddColumnTotalPriceToOrderProduct extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('desc');
-            $table->timestamps();
-            
+        Schema::table('order_product', function (Blueprint $table) {
+            //
+            $table->float('total_price')->after('product_id');
+
         });
     }
 
@@ -29,6 +27,9 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::table('order_product', function (Blueprint $table) {
+            //
+            $table->dropColumn('total_price');
+        });
     }
 }

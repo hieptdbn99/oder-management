@@ -6,6 +6,7 @@ use App\Customer;
 use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -19,8 +20,11 @@ class OrderController extends Controller
     {
         //
         $products = Product::all();
+        $orders = Order::all();
+        // $order = Order::find(1)->product()->sum('total_price');
+        // dd($order);
 
-        return view('order.orderlist',['products'=>$products]);
+        return view('order.orderlist')->with('products',$products)->with('orders',$orders);
        
     }
 
@@ -47,17 +51,33 @@ class OrderController extends Controller
         //
       
       
-    //     $order = new Order();
-    //     But dd request null
-    //    dd($request->all())............................
+        $order = new Order();
+        // But dd request null
+    //    dd($request->all());
        
-       $input = $request->all();
-       dd($input);
-        // $order->namecustomer = $request->name;
-        // $order->phone = $request->phone;
-        // $order->email = $request->email;
-        // $order->address = $request->address;
-        // $order->save();
+    //    $input = $request->all();
+    //    dd($input);
+        $order->namecustomer = $request->name;
+        $order->phone = $request->phone;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->save();
+        $arr_name_pro = $request->name_product;
+        $arr_price_pro = $request->price;
+        $arr_qty_pro = $request->quantity;
+        $arr_total_pro = $request->total;
+
+       
+       
+        for($i = 0 ; $i < count($arr_name_pro);$i++){
+            
+            $productDB =   Product::where('name', $arr_name_pro[$i])->get();
+            $order->product()->attach($productDB,['total_product'=>$arr_qty_pro[$i],'price'=> $arr_price_pro[$i],'total_price' => $arr_total_pro[$i]]);
+        }
+        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
+        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
+        $order->save();
+       
        
         
     

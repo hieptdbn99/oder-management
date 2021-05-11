@@ -29,7 +29,9 @@ var arrayProduct = [];
               console.log(product.name)
               arrayProduct.push(product);
               var msg = '<tr><td>'+product.name+'</td><td>'+product.quantity+'</td><td>'+product.price+'</td><td>'+product.total()+'</td></tr>' 
+            var msg_hide='<input type="hidden" name="name_product[]" value="'+product.name+'">'+'<input type="hidden" name="price[]" value="'+product.price+'">'+'<input type="hidden" name="total[]" value="'+product.total()+'">'+'<input type="hidden" name="quantity[]" value="'+product.quantity+'">'
               $('#render-product').append(msg);
+              $('#add-order-form').append(msg_hide);
               
               localStorage.setItem("my_product", JSON.stringify(arrayProduct))
 
@@ -37,8 +39,7 @@ var arrayProduct = [];
 
 
         $('#add-order-form').submit(function(e){
-        //   e.preventDefault();
-          // chuyển đến router.store
+          e.preventDefault();
 
           var formValues= $(this).serialize()
 
@@ -57,13 +58,13 @@ var arrayProduct = [];
             data: 
             {   
                 formValues,
-                list: JSON.stringify(list),
+              
             },
             success: function(respone){
               alert('Thêm mới thành công')
               $('#addOrderModal').modal('hide');
-              setTimeout(function(){// wait for 5 secs(2)
-               location.reload(); // then reload the page.(3)
+              setTimeout(function(){// 
+               location.reload(); 
            }, 500)
               
             },

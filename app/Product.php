@@ -12,6 +12,7 @@ class Product extends Model
      *
      * @return \Illuminate\Database\'Order'lations\BelongsToMany
      */
+    protected $table = 'products';
     public function oder()
     {
         return $this->belongsToMany('Order', 'order_product', 'product_id', 'order_id');

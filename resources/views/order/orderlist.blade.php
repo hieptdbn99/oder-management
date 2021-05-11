@@ -26,18 +26,21 @@
     </tr>
   </thead>
   <tbody>
+    @foreach ($orders as $order)
     <tr>
-      <th scope="row">1</th>
-      <td>Trần Đức Hiệp</td>
-      <td>0393933518</td>
-      <td>20</td>
-      <td>100000</td>
-      <td>07-05-2021</td>
+      <th scope="row">#</th>
+      <td>{{$order->namecustomer}}</td>
+      <td>{{$order->phone}}</td>
+      <td>{{$order->totalproduct}}</td>
+      <td>{{$order->totalprice}}</td>
+      <td>{{$order->created_at}}</td>
       <td>
         <a href=""><i class="far fa-edit mr-2"></i></a>
         <a href="" style="color: red;"><i class="far fa-trash-alt"></i></a>
       </td>
-    </tr>
+    </tr>  
+    @endforeach
+    
    
   </tbody>
 </table>
@@ -78,16 +81,16 @@
           </div>
           <div class="form-group">
               <label for="" class="d-block">Sản phẩm</label>
-              <select class="form-select" id="select-product" name="product_name[]" aria-label="Default select example">
+              <select class="form-select" id="select-product"  aria-label="Default select example">
                   @foreach ($products as $product)
                   <option value={{$product->name}} >{{$product->name}}</option> 
                   @endforeach
                   
                   
               </select>
-              <input aria-label="quantity" name="product_qty[]" id="input-qty" min="1" type="number" value="1">
-              <input id="input-price" name="product_price[]" type="text">
-              <a type="submit" href = "" name="list" class="addListPro"><i class="fas fa-plus-square"></i></a>
+              <input aria-label="quantity" id="input-qty" min="1" type="number" value="1">
+              <input id="input-price" type="text">
+              <a type="submit" href = "" class="addListPro"><i class="fas fa-plus-square"></i></a>
         
         
         
@@ -106,6 +109,7 @@
                   <tbody id="render-product">
                    
                   </tbody>
+                  {{-- //công viết --}}
                 </table>
         
           
