@@ -50,36 +50,36 @@ class OrderController extends Controller
     {
         //
       
-      
         $order = new Order();
         // But dd request null
     //    dd($request->all());
        
-    //    $input = $request->all();
-    //    dd($input);
+       $input = $request->all();
+     
         $order->namecustomer = $request->name;
         $order->phone = $request->phone;
         $order->email = $request->email;
         $order->address = $request->address;
+       
         $order->save();
+        // dd($order);
         $arr_name_pro = $request->name_product;
         $arr_price_pro = $request->price;
         $arr_qty_pro = $request->quantity;
         $arr_total_pro = $request->total;
 
-       
-       
-        for($i = 0 ; $i < count($arr_name_pro);$i++){
+            for($i = 0 ; $i < count($arr_name_pro);$i++){
             
             $productDB =   Product::where('name', $arr_name_pro[$i])->get();
             $order->product()->attach($productDB,['total_product'=>$arr_qty_pro[$i],'price'=> $arr_price_pro[$i],'total_price' => $arr_total_pro[$i]]);
         }
         $order->totalprice = Order::find($order->id)->product()->sum('total_price');
         $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
-        $order->save();
-       
        
         
+        $order->save();
+        
+        return redirect()->route('order.index')->with('successMsg','Thêm mới thành công!');
     
     }
    
@@ -104,6 +104,9 @@ class OrderController extends Controller
     public function edit($id)
     {
         //
+        $order = Order::find($id);
+        $product = Order::find($id)->product()->get();
+        return response()->json([ 'order_data' => $order,'product_data' => $product ]);
     }
 
     /**

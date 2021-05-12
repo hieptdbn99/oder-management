@@ -29,7 +29,7 @@ var arrayProduct = [];
               console.log(product.name)
               arrayProduct.push(product);
               var msg = '<tr><td>'+product.name+'</td><td>'+product.quantity+'</td><td>'+product.price+'</td><td>'+product.total()+'</td></tr>' 
-            var msg_hide='<input type="hidden" name="name_product[]" value="'+product.name+'">'+'<input type="hidden" name="price[]" value="'+product.price+'">'+'<input type="hidden" name="total[]" value="'+product.total()+'">'+'<input type="hidden" name="quantity[]" value="'+product.quantity+'">'
+              var msg_hide='<input type="hidden" name="name_product[]" value="'+product.name+'">'+'<input type="hidden" name="price[]" value="'+product.price+'">'+'<input type="hidden" name="total[]" value="'+product.total()+'">'+'<input type="hidden" name="quantity[]" value="'+product.quantity+'">'
               $('#render-product').append(msg);
               $('#add-order-form').append(msg_hide);
               
@@ -38,8 +38,35 @@ var arrayProduct = [];
         })
 
 
-        $('#add-order-form').submit(function(e){
+        $('.editOrder').click(function(e){
           e.preventDefault();
+          var url = $(this).attr('data-url');
+          $.ajax({
+            headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+            type:'get',
+            url: url,
+            dataType: 'json',
+            success: function(respone){
+              $('#input-name-edit').val(respone.order_data.namecustomer);
+              $('#input-email-edit').val(respone.order_data.email);
+              $('#input-phone-edit').val(respone.order_data.phone);
+              $('#input-address-edit').val(respone.order_data.address);
+            
+             
+            },
+            error: function(){
+              console.log('Fail')
+            }
+    
+          })
+        })
+
+
+
+        $('#add-order-form').submit(function(e){
+          // e.preventDefault();
 
           var formValues= $(this).serialize()
 
@@ -63,9 +90,9 @@ var arrayProduct = [];
             success: function(respone){
               alert('Thêm mới thành công')
               $('#addOrderModal').modal('hide');
-              setTimeout(function(){// 
-               location.reload(); 
-           }, 500)
+          //     setTimeout(function(){// 
+          //      location.reload(); 
+          //  }, 500)
               
             },
             error: function(){
