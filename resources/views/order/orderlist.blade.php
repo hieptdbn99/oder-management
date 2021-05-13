@@ -18,7 +18,7 @@
       <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">Mã đơn hàng</th>
       <th scope="col">Họ tên</th>
       <th scope="col">Số điện thoại</th>
       <th scope="col">Tổng sản phẩm</th>
@@ -30,15 +30,16 @@
   <tbody>
     @foreach ($orders as $order)
     <tr>
-      <th scope="row">{{$i=1}}</th>
+      <th scope="row">{{$order->id}}</th>
       <td>{{$order->namecustomer}}</td>
       <td>{{$order->phone}}</td>
       <td>{{$order->totalproduct}}</td>
       <td>{{$order->totalprice}}</td>
       <td>{{$order->created_at}}</td>
       <td>
+        <a href="" class="infoOrder" data-url="{{route('order.show',$order->id)}}" data-toggle="modal" data-target="#infoOrderModal" style="color: rgb(91, 91, 242); margin-right: 10px"><i class="fas fa-info-circle"></i></a>
         <a href="" class="editOrder" data-url="{{route('order.edit',$order->id)}}" data-toggle="modal" data-target="#editOrderModal"><i class="far fa-edit mr-2"></i></a>
-        <a href="" style="color: red;"><i class="far fa-trash-alt"></i></a>
+        <a href="" class="deleteOrder" style="color: red;" data-url="{{route('order.destroy',$order->id)}}"><i class="far fa-trash-alt"></i></a>
       </td>
     </tr>  
     @endforeach
@@ -55,6 +56,7 @@
 {{-- modal --}}
 @include('order.ordercreate')
 @include('order.orderedit')
+@include('order.orderinfo')
 {{-- 
   Modal sửa --}}
 @endsection

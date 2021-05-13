@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Order;
+use App\OrderProduct;
 use App\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -93,6 +95,10 @@ class OrderController extends Controller
     public function show($id)
     {
         //
+        $order = Order::find($id);
+        $product = Order::find($id)->product()->get();
+        $order_product =  DB::table('order_product')->where('order_id',$id)->get();
+        return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
     }
 
     /**
@@ -106,7 +112,8 @@ class OrderController extends Controller
         //
         $order = Order::find($id);
         $product = Order::find($id)->product()->get();
-        return response()->json([ 'order_data' => $order,'product_data' => $product ]);
+        $order_product =  DB::table('order_product')->where('order_id',$id)->get();
+        return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
     }
 
     /**
@@ -130,5 +137,8 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+            Order::find($id)->delete();
+            DB::table('order_product')->where('order_id',$id)->delete();
+            return response()->json(['data'=>'remove'],200);
     }
 }

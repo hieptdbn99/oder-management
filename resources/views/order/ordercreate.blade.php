@@ -1,5 +1,5 @@
 <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Thêm đơn hàng</h5>
@@ -35,8 +35,8 @@
                     
                     
                 </select>
-                <input aria-label="quantity" id="input-qty" min="1" type="number" value="1">
-                <input id="input-price" type="text">
+                <input aria-label="quantity" id="input-qty" min="1" max="9999" type="number" value="1">
+                <input id="input-price" type="text" placeholder="Đơn giá">
                 <a type="submit" href = "" class="addListPro"><i class="fas fa-plus-square"></i></a>
           
           

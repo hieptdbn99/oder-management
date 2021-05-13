@@ -6,5 +6,8 @@
   body{
     font-family: 'Poppins', sans-serif;
   }
+  .info-modal-body label{
+    font-weight: bold;
+  }
   
   

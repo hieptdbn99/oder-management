@@ -1,6 +1,6 @@
 
   <div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Sửa đơn hàng</h5>
@@ -45,8 +45,39 @@
             </div> --}}
               <div class="form-group">
                 <label for="">Sản phẩm</label>
-                <div id ="#editProduct">
-
+                <div class ="">
+                  <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá thành</th>
+                            <th>số lượng</th>
+                        </tr>
+                    </thead>
+                    <tbody class="editProduct">
+                     
+                            {{-- <td><select size="1" id="row-1-office" name="row-1-office">
+                              <option value="Edinburgh" selected="selected">
+                                  Edinburgh
+                              </option>
+                              <option value="London">
+                                  London
+                              </option>
+                              <option value="New York">
+                                  New York
+                              </option>
+                              <option value="San Francisco">
+                                  San Francisco
+                              </option>
+                              <option value="Tokyo">
+                                  Tokyo
+                              </option>
+                          </select></td>
+                            <td><input type="text" id="row-1-age" name="row-1-age" value="61"></td>
+                            <td><input type="text" id="row-1-position" name="row-1-position" value="System Architect"></td> --}}
+                     
+                    </tbody>
+                  </table>
                 </div>
               </div>
               <div class="modal-footer">
