@@ -1,20 +1,5 @@
-var arrayProduct = [];
-  var product = {
-        name: document.getElementById('select-product'),
-        quantity: document.getElementById('input-qty'),
-        price:document.getElementById('input-price'),
-
-        total: function() {
-          total = parseInt(this.price)*parseInt(this.quantity);
-          return total;
-        }
-      }   
-
-      $(document).ready(function(){
-
-// add product to list in order
+    $(document).ready(function(){
         $('.addListPro').click(function(e){
-            console.log("hello");
             e.preventDefault();
             var product = {
                 name: $('#select-product').val(),
@@ -27,46 +12,78 @@ var arrayProduct = [];
                 }
               }   
               console.log(product.name)
-              arrayProduct.push(product);
               var msg = '<tr><td>'+product.name+'</td><td>'+product.quantity+'</td><td>'+product.price+'</td><td>'+product.total()+'</td></tr>' 
               var msg_hide='<input type="hidden" name="name_product[]" value="'+product.name+'">'+'<input type="hidden" name="price[]" value="'+product.price+'">'+'<input type="hidden" name="total[]" value="'+product.total()+'">'+'<input type="hidden" name="quantity[]" value="'+product.quantity+'">'
               $('#render-product').append(msg);
               $('#add-order-form').append(msg_hide);
               
-              localStorage.setItem("my_product", JSON.stringify(arrayProduct))
-
         })
 
-
-        $('.editOrder').click(function(e){
-          e.preventDefault();
-          var url = $(this).attr('data-url');
-          $.ajax({
-            headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-            type:'get',
-            url: url,
-            dataType: 'json',
-            success: function(respone){
-              $('#input-name-edit').val(respone.order_data.namecustomer);
-              $('#input-email-edit').val(respone.order_data.email);
-              $('#input-phone-edit').val(respone.order_data.phone);
-              $('#input-address-edit').val(respone.order_data.address);
+      //   $('.editOrder').click(function(e){
+      //     e.preventDefault();
+      //     var url = $(this).attr('data-url');
+      //     $.ajax({
+      //       headers: {
+      //   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      // },
+      //       type:'get',
+      //       url: url,
+      //       dataType: 'json',
+      //       success: function(response){
+      //         $('#input-name-edit').val(response.order_data.namecustomer);
+      //         $('#input-email-edit').val(response.order_data.email);
+      //         $('#input-phone-edit').val(response.order_data.phone);
+      //         $('#input-address-edit').val(response.order_data.address);
             
-              for (i = 0; i < respone.order_product_data.length; i++) {
-                var msg_edit = '<tr><td><input type="text" name="name_product[]" value="'+respone.product_data[i].name+'"></td>'+'<td><input type="text" name="price[]" value="'+respone.order_product_data[i].price+'"></td>'+'<td><input type="text" name="quantity[]" value="'+respone.order_product_data[i].total_product+'"></td></tr>'
-                 $('.editProduct').append(msg_edit);
-              }
+      //         for (i = 0; i < response.order_product_data.length; i++) {
+      //           var msg_edit = '<tr><td>'+response.product_data[i].name+'</td><td>'+response.order_product_data[i].price+'</td><td>'+response.order_product_data[i].total_product+'</td><td><i data-url = {{route("delete_product",'+response.order_product_data[i].product_id+')}} class="fas fa-edit mr-2 remove_product"></i><i class="fas fa-trash-alt"></i></td></tr>'
+      //            $('.editProduct').append(msg_edit);
+      //         }
+          
              
-            },
-            error: function(){
-              console.log('Fail')
-            }
+      //       },
+      //       error: function(){
+      //         console.log('Fail')
+      //       }
     
-          })
-        })
+      //     })
+      //   })
+        $('.addListProEdit').click(function(e){
+          e.preventDefault();
+              var order_id = $('#id_order').val();
+              var url = $(this).attr('data-url');
+              var name_product= $('#select-product-edit').val();
+              var quantity = $('#add-qty-edit').val();
+              var price= $('#add-price-edit').val();
+              console.log(url);
+              var total = parseInt(price)*parseInt(quantity);
+              $.ajax({
+                    headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+                type: 'post',
+                url: url,
+                data: {
+                  order_id: order_id,
+                  name_product:name_product,
+                  quantity:quantity,
+                  price:price,
+                  total:total,
+                },
+                success: function(response){
+                  window.location.reload();
+                 
+                },
+                error: function(){
+                  console.log('Fail')
+                }
+        
+              })
 
+      })
+        $('#form_edit_modal').submit(function(e){
+
+        })
         $('.infoOrder').click(function(e){
           e.preventDefault();
           var url = $(this).attr('data-url');
@@ -99,9 +116,6 @@ var arrayProduct = [];
             $('.tr-info-order').remove();
           })
         })
-
-
-
         $('#add-order-form').submit(function(e){
           // e.preventDefault();
 

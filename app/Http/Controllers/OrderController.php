@@ -111,9 +111,13 @@ class OrderController extends Controller
     {
         //
         $order = Order::find($id);
+        $allproduct = Product::all();
         $product = Order::find($id)->product()->get();
-        $order_product =  DB::table('order_product')->where('order_id',$id)->get();
-        return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
+        $order_product =  DB::table('order_product')->where('order_product.order_id',$order->id)
+        ->join('products', 'order_product.product_id', '=', 'products.id')->get();
+        // return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
+    
+        return view('order.orderedit')->with('order',$order)->with('allProduct',$allproduct)->with('order_product',$order_product);        
     }
 
     /**
@@ -141,4 +145,31 @@ class OrderController extends Controller
             DB::table('order_product')->where('order_id',$id)->delete();
             return response()->json(['data'=>'remove'],200);
     }
+    public function deleteProductOrder($order_id,$product_id){
+        DB::table('order_product')->where('order_id', $order_id)->where('product_id',$product_id)->delete();
+        return response()->json(['data'=>'remove'],200);
+
+    }
+    public function addProduct(Request $request){
+        
+        $order = Order::find($request->order_id);
+        $product =Product::where('name',$request->name_product)->get();
+        // $data = $request->total;
+        $order->product()->attach($product,['total_product'=>$request->quantity,'price'=> $request->price,'total_price' => $request->total]);
+        // DB::table('order_product')->insert([
+        //     'order_id' => $request->order_id,
+        //     'product_id' => $product->id,
+        //     'total_product' => $request->quantity,
+
+        //     'price' => $request->price,
+
+        //     'total_price' => $request->total,
+        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
+        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
+        $order->save();
+        // ]);
+        return response()->json(['data'=>"ok"],200);
+    }
+
+  
 }

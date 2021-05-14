@@ -38,7 +38,7 @@
       <td>{{$order->created_at}}</td>
       <td>
         <a href="" class="infoOrder" data-url="{{route('order.show',$order->id)}}" data-toggle="modal" data-target="#infoOrderModal" style="color: rgb(91, 91, 242); margin-right: 10px"><i class="fas fa-info-circle"></i></a>
-        <a href="" class="editOrder" data-url="{{route('order.edit',$order->id)}}" data-toggle="modal" data-target="#editOrderModal"><i class="far fa-edit mr-2"></i></a>
+        <a href="{{route('order.edit',$order->id)}}"><i class="far fa-edit mr-2"></i></a>
         <a href="" class="deleteOrder" style="color: red;" data-url="{{route('order.destroy',$order->id)}}"><i class="far fa-trash-alt"></i></a>
       </td>
     </tr>  
@@ -55,7 +55,6 @@
 
 {{-- modal --}}
 @include('order.ordercreate')
-@include('order.orderedit')
 @include('order.orderinfo')
 {{-- 
   Modal sửa --}}
