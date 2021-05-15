@@ -1,4 +1,5 @@
-    $(document).ready(function(){
+  
+  $(document).ready(function(){
         $('.addListPro').click(function(e){
             e.preventDefault();
             var product = {
@@ -170,5 +171,79 @@
               }
             })
           }
+        })
+        $('.remove_product').click(function(e){
+          var url = $(this).attr('data-url');
+            $.ajax({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              type: 'delete',
+              url: url,
+              success:function(response){
+                console.log(response.data)
+              },
+              error:function(jqXHR,textStatus,errorThorwn){
+
+              }
+            })
+          
+        })
+        $('.edit_product').click(function(e){
+          e.preventDefault();
+          var url = $(this).attr('data-url');
+            $.ajax({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+             
+              type: 'get',
+              url: url,
+              success:function(response){
+                
+                console.log(response.product)
+                $('.show-name-product').html(response.product.name)
+                $('.input_qty_edit').val(response.data[0].total_product)
+                $('.input_price_edit').val(response.data[0].price)
+                $('#form-edit-product').attr('data-url',flagsUrl+'/'+response.data[0].order_id+'/'+response.data[0].product_id)
+              },
+              error:function(jqXHR,textStatus,errorThorwn){
+
+              }
+            })
+          
+        })
+       
+        $('.submit-edit-product').click(function(e){
+          e.preventDefault();
+          var url = $('#form-edit-product').attr('data-url');
+         
+          console.log(url)
+          var total_product= $(".input_qty_edit").val()
+          var price= $("input_price_edit").val()
+          var total = parseInt(this.price)*parseInt(this.quantity)
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+           
+            type: 'put',
+            url: url,
+            data:{
+              total_product: total_product,
+              price: price,
+              total:total,
+            },
+            success:function(response){
+              
+              console.log(response.data)
+              $('#editProduct').modal('hide');
+              window.location.reload()
+              
+            },
+            error:function(jqXHR,textStatus,errorThorwn){
+
+            }
+          })
         })
       })

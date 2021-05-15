@@ -144,11 +144,22 @@ class OrderController extends Controller
             Order::find($id)->delete();
             DB::table('order_product')->where('order_id',$id)->delete();
             return response()->json(['data'=>'remove'],200);
+            
     }
-    public function deleteProductOrder($order_id,$product_id){
+    public function removeProduct($order_id,$product_id){
+        $order = Order::find($order_id);
+
         DB::table('order_product')->where('order_id', $order_id)->where('product_id',$product_id)->delete();
+        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
+        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
         return response()->json(['data'=>'remove'],200);
 
+    }
+    public function editProduct($order_id,$product_id){
+
+       $order_product = DB::table('order_product')->where('order_id', $order_id)->where('product_id',$product_id)->get();
+       $product = Product::find($product_id);
+        return response()->json(['data'=>$order_product,'product'=>$product],200);
     }
     public function addProduct(Request $request){
         
@@ -169,6 +180,23 @@ class OrderController extends Controller
         $order->save();
         // ]);
         return response()->json(['data'=>"ok"],200);
+    }
+    public function updateProduct(Request $request, $order_id,$product_id)
+    {
+        //
+        $order = Order::find($request->order_id);
+        $updateProduct = DB::table('order_product')
+              ->where('order_id', $order_id)->where('product_id',$product_id)
+              ->update(
+                  ['total_product' => $request->total_product],
+                  ['price' => $request->price],
+                  ['total_price' => $request->total]
+            
+            );
+            $order->totalprice = Order::find($order->id)->product()->sum('total_price');
+            $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
+            return response()->json(['data'=>"ok"],200);
+
     }
 
   

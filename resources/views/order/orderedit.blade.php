@@ -36,7 +36,7 @@
           </select>
           <input aria-label="quantity" id="add-qty-edit" min="1" type="number" value="1">
           <input id="add-price-edit" type="text">
-          <a type="submit" href="{{route('addproduct') }}" class="addListProEdit" data-url="{{ route('addproduct') }}"><i class="fas fa-plus-square"></i></a>
+          <a type="submit" href="{{route('addProduct') }}" class="addListProEdit" data-url="{{ route('addProduct') }}"><i class="fas fa-plus-square"></i></a>
     
     
     
@@ -56,9 +56,9 @@
                 @foreach ($order_product as $item)
                 <tr>
                   <td>{{$item->name}}</td>
-                  <td>{{$item->price}}</td>
-                  <td>{{$item->total_product}}</td>
-                  <td><i class="fas fa-edit mr-2 "></i><i class="fas fa-trash-alt"></i></td>
+                  <td id="show-price-edit">{{$item->price}}</td>
+                  <td id="show-quantity-edit">{{$item->total_product}}</td>
+                  <td><a href="" class="edit_product" data-url="{{route('editProduct',[$item->order_id,$item->product_id])}}" data-toggle="modal" data-target="#editProduct"><i class="fas fa-edit mr-2 "></i></a><a href="" class="remove_product" data-url="{{route('removeProduct',[$item->order_id,$item->product_id])}}"><i class="fas fa-trash-alt "></i></a></td>
                 </tr>
                 @endforeach
                 
@@ -75,5 +75,45 @@
   </div>
    </div>
  </div>
+
+{{-- modal --}}
+ <div class="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sửa sản phẩm</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" id="form-edit-product" data-url="{{route('addProduct')}}" method="post">
+          @csrf
+          <div class="form-group">
+              <label for="">Sản phẩm</label>
+              <h4 class="show-name-product"><h4>
+          </div>
+          <div class="form-group">
+              <label for="">Số lượng</label>
+              <input type="number" min="1" max="9999" name="quantity_edit" class="form-control input_qty_edit">
+          </div>
+          <div class="form-group">
+            <label for="">Đơn giá</label>
+            <input type="text" name="price_edit" class="form-control input_price_edit" >
+        </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="" class="btn btn-primary submit-edit-product">Save changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script>
+    // "global" vars, built using blade
+    var flagsUrl = '{{ URL::asset('order/updateproduct') }}';
+  </script>
+
        
     @endsection
