@@ -1,7 +1,9 @@
 @extends('layout.master');
 @section('order-management') 
 @if(Session::has('successMsg'))
-<div class="alert alert-success"> {{ Session::get('successMsg') }}</div>
+  <script type="text/javascript">
+    alert({{ Session::get('successMsg') }});
+  </script>
 @endif
 
 <div class="container">

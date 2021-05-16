@@ -8,26 +8,35 @@
           </button>
         </div>
         <div class="modal-body">
-          <form action="{{ route('order.store') }}" id="add-order-form" data-url="{{ route('order.store') }}" method="post">
+          <form action="{{ route('order.store') }}" id="add-order-form" enctype="multipart/form-data" data-url="{{ route('order.store') }}" method="post">
             @csrf
-            <div class="form-group">
+            <div class="row">
+            <div class="form-group col-sm-6">
                 <label for="">Họ và tên khách hàng</label>
-                <input type="text" name="name" class="form-control" id="input-name">
+                <input type="text" name="name" class="form-control" required id="input-name">
             </div>
+            <div class="form-group col-sm-6">
+              <label for="">Ảnh đại diện</label>
+              <input type="file" name="avatar" class="form-control" required id="input-arvatar">
+            </div>
+
+          </div>
             <div class="form-group">
                 <label for="">Email</label>
-                <input type="email" name="email" class="form-control" id="input-email">
+                <input type="email" name="email" required class="form-control" id="input-email">
             </div>
             <div class="form-group">
                 <label for="">Số điện thoại</label>
-                <input type="text" name="phone" class="form-control" id="input-phone">
+                <input type="text" name="phone" required class="form-control" id="input-phone">
             </div>
             <div class="form-group">
                 <label for="">Địa chỉ</label>
-                <input type="text" name="address" class="form-control" id="input-address">
+                <input type="text" name="address" required class="form-control" id="input-address">
             </div>
+            <textarea name="insert_note" id="text"></textarea>
+            @include('ckfinder::setup')
             <div class="form-group">
-                <label for="" class="d-block">Sản phẩm</label>
+                <label for="" class="d-block mt-2">Sản phẩm</label>
                 <select class="form-select" id="select-product"  aria-label="Default select example">
                     @foreach ($products as $product)
                     <option value={{$product->name}} >{{$product->name}}</option> 
@@ -35,7 +44,7 @@
                     
                     
                 </select>
-                <input aria-label="quantity" id="input-qty" min="1" max="9999" type="number" value="1">
+                <input aria-label="quantity" id="input-qty" min="1" max="9999"  type="number" value="1">
                 <input id="input-price" type="text" placeholder="Đơn giá">
                 <a type="submit" href = "" class="addListPro"><i class="fas fa-plus-square"></i></a>
           

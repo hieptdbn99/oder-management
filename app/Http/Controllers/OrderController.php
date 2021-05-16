@@ -62,7 +62,11 @@ class OrderController extends Controller
         $order->phone = $request->phone;
         $order->email = $request->email;
         $order->address = $request->address;
-       
+            $file = $request->file('avatar');
+            $order->note= $request->insert_note;
+            $file->move('uploads',$file->getClientOriginalName());
+            $order->avatar = $file->getClientOriginalName();
+
         $order->save();
         // dd($order);
         $arr_name_pro = $request->name_product;
@@ -116,7 +120,6 @@ class OrderController extends Controller
         $order_product =  DB::table('order_product')->where('order_product.order_id',$order->id)
         ->join('products', 'order_product.product_id', '=', 'products.id')->get();
         // return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
-    
         return view('order.orderedit')->with('order',$order)->with('allProduct',$allproduct)->with('order_product',$order_product);        
     }
 
@@ -129,7 +132,26 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //  
+        $order = Order::find($id);
+        $order->namecustomer = $request->name;
+        
+        $file = $request->file('avatar');
+          
+            $file->move('uploads',$file->getClientOriginalName());
+            $order->avatar = $file->getClientOriginalName();
+
+        $order->email = $request->email;
+        $order->phone = $request->phone;
+
+        $order->address= $request->address;
+        $order->note = $request->edit_note;
+        $order->totalprice = Order::find($id)->product()->sum('total_price');
+        $order->totalproduct = Order::find($id)->product()->sum('total_product');
+
+        $alert = "Sửa thành công!";
+        $order->save();
+        return redirect()->route('order.index');
     }
 
     /**

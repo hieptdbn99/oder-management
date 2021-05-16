@@ -19,36 +19,6 @@
               $('#add-order-form').append(msg_hide);
               
         })
-
-      //   $('.editOrder').click(function(e){
-      //     e.preventDefault();
-      //     var url = $(this).attr('data-url');
-      //     $.ajax({
-      //       headers: {
-      //   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      // },
-      //       type:'get',
-      //       url: url,
-      //       dataType: 'json',
-      //       success: function(response){
-      //         $('#input-name-edit').val(response.order_data.namecustomer);
-      //         $('#input-email-edit').val(response.order_data.email);
-      //         $('#input-phone-edit').val(response.order_data.phone);
-      //         $('#input-address-edit').val(response.order_data.address);
-            
-      //         for (i = 0; i < response.order_product_data.length; i++) {
-      //           var msg_edit = '<tr><td>'+response.product_data[i].name+'</td><td>'+response.order_product_data[i].price+'</td><td>'+response.order_product_data[i].total_product+'</td><td><i data-url = {{route("delete_product",'+response.order_product_data[i].product_id+')}} class="fas fa-edit mr-2 remove_product"></i><i class="fas fa-trash-alt"></i></td></tr>'
-      //            $('.editProduct').append(msg_edit);
-      //         }
-          
-             
-      //       },
-      //       error: function(){
-      //         console.log('Fail')
-      //       }
-    
-      //     })
-      //   })
         $('.addListProEdit').click(function(e){
           e.preventDefault();
               var order_id = $('#id_order').val();
@@ -83,7 +53,25 @@
 
       })
         $('#form_edit_modal').submit(function(e){
+          var formValues= $(this).serialize()
+          var url = $(this).attr('data-url');
+          $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+           
+            type: 'put',
+            url: url,
+            data:{
+             data:formValues
+            },
+            success:function(response){
+                            
+            },
+            error:function(jqXHR,textStatus,errorThorwn){
 
+            }
+          })
         })
         $('.infoOrder').click(function(e){
           e.preventDefault();
@@ -97,9 +85,12 @@
             dataType: 'json',
             success: function(respone){
               $('#info_name').html(respone.order_data.namecustomer);
+              $('#info_avatar').attr('src','../uploads/'+respone.order_data.avatar);
               $('#info_email').html(respone.order_data.email);
               $('#info_phone').html(respone.order_data.phone);
               $('#info_address').html(respone.order_data.address);
+              $('#info_note').html(respone.order_data.note);
+
               $('#info_total_price').html(respone.order_data.totalprice+" đ")
             
               for (i = 0; i < respone.order_product_data.length; i++) {
