@@ -18,7 +18,7 @@
             
         </select>
         <input aria-label="quantity" id="add-qty-edit" min="1" type="number" value="1">
-        <input id="add-price-edit" type="text">
+        <input id="add-price-edit" type="number">
         <a type="submit" href="{{route('addProduct') }}" class="addListProEdit" data-url="{{ route('addProduct') }}"><i class="fas fa-plus-square"></i></a>
   
   
@@ -42,7 +42,7 @@
                 <td>{{$item->name}}</td>
                 <td id="show-price-edit">{{$item->price}}</td>
                 <td id="show-quantity-edit">{{$item->total_product}}</td>
-                <td><a href="" class="edit_product" data-url="{{route('editProduct',[$item->order_id,$item->product_id])}}" data-toggle="modal" data-target="#editProduct"><i class="fas fa-edit mr-2 "></i></a><a href="" class="remove_product" data-url="{{route('removeProduct',[$item->order_id,$item->product_id])}}"><i class="fas fa-trash-alt "></i></a></td>
+                <td><a href="" class="edit_product" data-url="{{route('editProduct',[$item->order_id,$item->product_id])}}" data-toggle="modal" data-target="#editProduct"><i class="fas fa-edit mr-2 "></i></a><a href="" class="remove_product" data-url="{{route('removeProduct',[$item->order_id,$item->product_id])}}"><i class="fas fa-trash-alt " style="color: red"></i></a></td>
               </tr>
               @endforeach
               
@@ -54,29 +54,31 @@
     
       <div class="form-group">
           <label for=""><h4>Họ và tên khách hàng</h4></label>
-          <input type="text" name="name" class="form-control" id="input-name-edit" value="{{$order->namecustomer}}">
+          <input type="text" name="name" class="form-control" required id="input-name-edit" value="{{$order->namecustomer}}">
           <input type="hidden" name="idHidden" id="id_order" value="{{$order->id}}">
       </div>
       <div class="form-group">
         <label for="">Ảnh đại diện</label>
-        <input type="file" name="avatar" class="form-control" required id="input-arvatar-edit" value="{{$order->avatar}}"><button class="btn btn-light btn-edit-avatar">Chọn</button>
+        <input type="file" name="avatar" class="form-control"  id="input-arvatar-edit" value="{{$order->avatar}}">
         <img id="img-avatar-edit" class="w-25" src="{{asset("uploads/$order->avatar")}}" alt="">
 
       </div>
       <div class="form-group">
           <label for="">Email</label>
-          <input type="email" name="email" class="form-control" id="input-email-edit" value="{{$order->email}}">
+          <input type="email" name="email" class="form-control" required id="input-email-edit" value="{{$order->email}}">
       </div>
       <div class="form-group">
           <label for="">Số điện thoại</label>
-          <input type="text" name="phone" class="form-control" id="input-phone-edit" value="{{$order->phone}}">
+          <input type="text" name="phone" class="form-control" required id="input-phone-edit" value="{{$order->phone}}">
       </div>
       <div class="form-group">
           <label for="">Địa chỉ</label>
-          <input type="text" name="address" class="form-control" id="input-address-edit" value="{{$order->address}}">
+          <input type="text" name="address" class="form-control" required id="input-address-edit" value="{{$order->address}}">
       </div>
-      <textarea name="edit_note" id="text_edit_note">{{$order->note}}</textarea>
-
+      <div class="form-group">
+        <label for="">Ghi chú</label>
+      <textarea name="note" id="text_edit_note">{{$order->note}}</textarea>
+      </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
           <button type="submit" class="btn btn-primary">Sửa</button>
@@ -97,7 +99,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="" id="form-edit-product" data-url="{{route('addProduct')}}" method="post">
+        <form action="" id="form-edit-product" data-url="{{route('addProduct')}}" enctype="multipart/form-data" method="post">
           @csrf
           <div class="form-group">
               <label for="">Sản phẩm</label>
@@ -112,14 +114,16 @@
             <input type="text" name="price_edit" class="form-control input_price_edit" >
         </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="" class="btn btn-primary submit-edit-product">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+              <button type="" class="btn btn-primary submit-edit-product">Sửa</button>
             </div>
         </form>
       </div>
     </div>
   </div>
   </div>
+  <script src=""></script>
+  <script src="{{asset('js/create.js')}}"></script>
   <script>
     // "global" vars, built using blade
     var flagsUrl = '{{ URL::asset('order/updateproduct') }}';

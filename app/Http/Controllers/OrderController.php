@@ -62,11 +62,12 @@ class OrderController extends Controller
         $order->phone = $request->phone;
         $order->email = $request->email;
         $order->address = $request->address;
+        if($request->hasFile('avatar')){
             $file = $request->file('avatar');
-            $order->note= $request->insert_note;
+            $order->note= $request->note;
             $file->move('uploads',$file->getClientOriginalName());
             $order->avatar = $file->getClientOriginalName();
-
+        }
         $order->save();
         // dd($order);
         $arr_name_pro = $request->name_product;
@@ -135,17 +136,16 @@ class OrderController extends Controller
         //  
         $order = Order::find($id);
         $order->namecustomer = $request->name;
-        
-        $file = $request->file('avatar');
-          
+        if($request->hasFile('avatar')){
+            $file = $request->file('avatar');
             $file->move('uploads',$file->getClientOriginalName());
             $order->avatar = $file->getClientOriginalName();
-
+        }
         $order->email = $request->email;
         $order->phone = $request->phone;
 
         $order->address= $request->address;
-        $order->note = $request->edit_note;
+        $order->note = $request->note;
         $order->totalprice = Order::find($id)->product()->sum('total_price');
         $order->totalproduct = Order::find($id)->product()->sum('total_product');
 

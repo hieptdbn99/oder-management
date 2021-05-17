@@ -33,7 +33,7 @@
                 <label for="">Địa chỉ</label>
                 <input type="text" name="address" required class="form-control" id="input-address">
             </div>
-            <textarea name="insert_note" id="text"></textarea>
+            <textarea name="note" id="text"></textarea>
             @include('ckfinder::setup')
             <div class="form-group">
                 <label for="" class="d-block mt-2">Sản phẩm</label>
@@ -46,7 +46,7 @@
                 </select>
                 <input aria-label="quantity" id="input-qty" min="1" max="9999"  type="number" value="1">
                 <input id="input-price" type="text" placeholder="Đơn giá">
-                <a type="submit" href = "" class="addListPro"><i class="fas fa-plus-square"></i></a>
+                <a href = "" class="addListPro"><i class="fas fa-plus-square"></i></a>
           
           
           
@@ -68,11 +68,12 @@
                   </table>    
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary">Thêm</button>
               </div>
           </form>
         </div>
       </div>
     </div>
     </div>
+    <script src="{{asset('js/create.js')}}"></script>

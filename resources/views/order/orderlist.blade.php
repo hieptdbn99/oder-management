@@ -58,6 +58,7 @@
 {{-- modal --}}
 @include('order.ordercreate')
 @include('order.orderinfo')
+<script src="{{asset('js/delete_order.js')}}"></script>
 {{-- 
   Modal sửa --}}
 @endsection
