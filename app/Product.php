@@ -17,4 +17,13 @@ class Product extends Model
     {
         return $this->belongsToMany('Order', 'order_product', 'product_id', 'order_id');
     }
+    public function getAllProduct(){
+        return Product::all();
+    }
+    public function getProductById($id){
+        return Product::find($id);
+    }
+    public function getProductByName($name){
+        return Product::where('name',$name)->get();
+    }
 }

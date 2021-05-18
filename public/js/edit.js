@@ -18,7 +18,7 @@ var edit = function(){
         getProToEdit();
         removeProEdit();
         editPro();
-        orderEdit();
+        orderEditSubmit();
 
     }
 
@@ -64,8 +64,8 @@ var edit = function(){
            
             console.log(url)
             var total_product= $(".input_qty_edit").val()
-            var price= $("input_price_edit").val()
-            var total = parseInt(this.price)*parseInt(this.quantity)
+            var price= $(".input_price_edit").val()
+            var total = parseInt(price)*parseInt(total_product)
             $.ajax({
               headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -137,8 +137,8 @@ var edit = function(){
               })
           })
     }
-    var editOrder = function(){
-        el.orderEdit.click(function(e){
+    var orderEditSubmit = function(){
+        el.btnSubmitOrder.click(function(e){
             var formValues= $(this).serialize()
             var url = $(this).attr('data-url');
             $.ajax({

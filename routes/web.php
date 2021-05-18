@@ -20,6 +20,8 @@ Route::get('/', function () {
 });
 Route::resource('order', 'OrderController');
 Route::post('order/addproduct', 'OrderController@addProduct')->name('addProduct');
+Route::post('order/search', 'OrderController@search')->name('order.search');
+
 Route::delete('order/removeproduct/{order_id}/{product_id}', 'OrderController@removeProduct')->name('removeProduct');
 Route::get('order/editproduct/{order_id}/{product_id}', 'OrderController@editProduct')->name('editProduct');
 Route::put('order/updateproduct/{order_id}/{product_id}', 'OrderController@updateProduct')->name('updateProduct');

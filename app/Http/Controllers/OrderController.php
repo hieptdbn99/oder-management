@@ -18,16 +18,22 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->orderObj = new Order();
+        $this->productObj = new Product();
+    }
     public function index()
     {
         //
-        $products = Product::all();
-        $orders = Order::all();
-        // $order = Order::find(1)->product()->sum('total_price');
-        // dd($order);
-
-        return view('order.orderlist')->with('products',$products)->with('orders',$orders);
+        return view('order.orderlist')->with('products',$this->productObj->getAllProduct())->with('orders',$this->orderObj->getAllOrderPaginate());
        
+    }
+    public function search(Request $request){
+        // $products = Product::all();
+        // $orders = $request->all();
+        // // return view('order.orderlist')->with('products',$products)->with('orders',$orders);
+        // return response()->json(['data'=>$orders],200);
     }
 
     /**
@@ -37,9 +43,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
-
-      
+        //    
     }
 
     /**
@@ -51,41 +55,21 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-      
-        $order = new Order();
-        // But dd request null
-    //    dd($request->all());
-       
-       $input = $request->all();
-     
-        $order->namecustomer = $request->name;
-        $order->phone = $request->phone;
-        $order->email = $request->email;
-        $order->address = $request->address;
+        $namecustomer = $request->name;
+        $phone = $request->phone;
+        $email = $request->email;
+        $address = $request->address;
+        $note= $request->note;
         if($request->hasFile('avatar')){
-            $file = $request->file('avatar');
-            $order->note= $request->note;
+            $file = $request->file('avatar');    
             $file->move('uploads',$file->getClientOriginalName());
-            $order->avatar = $file->getClientOriginalName();
+            $avatar = $file->getClientOriginalName();
         }
-        $order->save();
-        // dd($order);
         $arr_name_pro = $request->name_product;
         $arr_price_pro = $request->price;
         $arr_qty_pro = $request->quantity;
         $arr_total_pro = $request->total;
-
-            for($i = 0 ; $i < count($arr_name_pro);$i++){
-            
-            $productDB =   Product::where('name', $arr_name_pro[$i])->get();
-            $order->product()->attach($productDB,['total_product'=>$arr_qty_pro[$i],'price'=> $arr_price_pro[$i],'total_price' => $arr_total_pro[$i]]);
-        }
-        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
-        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
-       
-        
-        $order->save();
-        
+        $this->orderObj->storeOrder($namecustomer,$avatar,$phone,$email,$address,$note,$arr_name_pro,$arr_price_pro,$arr_qty_pro,$arr_total_pro);  
         return redirect()->route('order.index')->with('successMsg','Thêm mới thành công!');
     
     }
@@ -100,10 +84,11 @@ class OrderController extends Controller
     public function show($id)
     {
         //
-        $order = Order::find($id);
-        $product = Order::find($id)->product()->get();
-        $order_product =  DB::table('order_product')->where('order_id',$id)->get();
-        return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
+        
+        $orderFindId = $this->orderObj->getOrderById($id);
+        $product = $this->orderObj->getProductByIdOrder($id);
+        $order_product = $this->orderObj->getOrderProduct($id);
+        return response()->json([ 'order_data' => $orderFindId,'product_data' => $product,'order_product_data'=>$order_product]);
     }
 
     /**
@@ -115,12 +100,10 @@ class OrderController extends Controller
     public function edit($id)
     {
         //
-        $order = Order::find($id);
-        $allproduct = Product::all();
-        $product = Order::find($id)->product()->get();
-        $order_product =  DB::table('order_product')->where('order_product.order_id',$order->id)
-        ->join('products', 'order_product.product_id', '=', 'products.id')->get();
-        // return response()->json([ 'order_data' => $order,'product_data' => $product,'order_product_data'=>$order_product]);
+        $order = $this->orderObj->getOrderById($id);
+        $allproduct = $this->productObj->getAllProduct();
+        $product = $this->orderObj->getProductByIdOrder($id);
+        $order_product = $this->orderObj->getProductOfOrder($id);
         return view('order.orderedit')->with('order',$order)->with('allProduct',$allproduct)->with('order_product',$order_product);        
     }
 
@@ -134,23 +117,20 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         //  
-        $order = Order::find($id);
-        $order->namecustomer = $request->name;
+      
+        $namecustomer = $request->name;
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');
             $file->move('uploads',$file->getClientOriginalName());
-            $order->avatar = $file->getClientOriginalName();
+            $avatar = $file->getClientOriginalName();
+        }else{
+            $avatar="";
         }
-        $order->email = $request->email;
-        $order->phone = $request->phone;
-
-        $order->address= $request->address;
-        $order->note = $request->note;
-        $order->totalprice = Order::find($id)->product()->sum('total_price');
-        $order->totalproduct = Order::find($id)->product()->sum('total_product');
-
-        $alert = "Sửa thành công!";
-        $order->save();
+        $email = $request->email;
+        $phone = $request->phone;
+        $address= $request->address;
+        $note = $request->note;
+        $this->orderObj->updateOrder($id,$namecustomer,$avatar,$phone,$email,$address,$note);
         return redirect()->route('order.index');
     }
 
@@ -163,60 +143,38 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
-            Order::find($id)->delete();
-            DB::table('order_product')->where('order_id',$id)->delete();
+         
+            $this->orderObj->deleteOrder($id);
             return response()->json(['data'=>'remove'],200);
             
     }
     public function removeProduct($order_id,$product_id){
-        $order = Order::find($order_id);
-
-        DB::table('order_product')->where('order_id', $order_id)->where('product_id',$product_id)->delete();
-        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
-        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
+        $this->orderObj->deleteProductOfOrder($order_id,$product_id);
         return response()->json(['data'=>'remove'],200);
 
     }
     public function editProduct($order_id,$product_id){
-
-       $order_product = DB::table('order_product')->where('order_id', $order_id)->where('product_id',$product_id)->get();
-       $product = Product::find($product_id);
+        
+        $order_product = $this->orderObj->getEditProductOrder($order_id,$product_id);
+        $product = $this->productObj->getProductById($product_id);
         return response()->json(['data'=>$order_product,'product'=>$product],200);
     }
     public function addProduct(Request $request){
-        
-        $order = Order::find($request->order_id);
-        $product =Product::where('name',$request->name_product)->get();
-        // $data = $request->total;
-        $order->product()->attach($product,['total_product'=>$request->quantity,'price'=> $request->price,'total_price' => $request->total]);
-        // DB::table('order_product')->insert([
-        //     'order_id' => $request->order_id,
-        //     'product_id' => $product->id,
-        //     'total_product' => $request->quantity,
-
-        //     'price' => $request->price,
-
-        //     'total_price' => $request->total,
-        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
-        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
-        $order->save();
-        // ]);
+        $order = new Order();
+        $product = new Product();
+        $get_order = $order->getOrderById($request->order_id);
+        $get_pr_by_name= $product ->getProductByName($request->name_product);
+        $get_order->product()->attach($get_pr_by_name,['total_product'=>$request->quantity,'price'=> $request->price,'total_price' => $request->total]);
         return response()->json(['data'=>"ok"],200);
     }
     public function updateProduct(Request $request, $order_id,$product_id)
     {
         //
-        $order = Order::find($request->order_id);
-        $updateProduct = DB::table('order_product')
-              ->where('order_id', $order_id)->where('product_id',$product_id)
-              ->update(
-                  ['total_product' => $request->total_product],
-                  ['price' => $request->price],
-                  ['total_price' => $request->total]
-            
-            );
-            $order->totalprice = Order::find($order->id)->product()->sum('total_price');
-            $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
+  
+        $order = new Order();
+        $order-> updateProductInOrder($order_id,$product_id,$request->total_product,$request->price,$request->total);
+        //     $order->totalprice = Order::find($order->id)->product()->sum('total_price');
+        //     $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
             return response()->json(['data'=>"ok"],200);
 
     }
