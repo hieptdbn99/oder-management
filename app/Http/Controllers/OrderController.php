@@ -26,7 +26,7 @@ class OrderController extends Controller
     public function index()
     {
         //
-        return view('order.orderlist')->with('products',$this->productObj->getAllProduct())->with('orders',$this->orderObj->getAllOrderPaginate());
+        return view('order.list')->with('products',$this->productObj->getAllProduct())->with('orders',$this->orderObj->getAllOrderPaginate());
        
     }
     public function search(Request $request){
@@ -104,7 +104,7 @@ class OrderController extends Controller
         $allproduct = $this->productObj->getAllProduct();
         $product = $this->orderObj->getProductByIdOrder($id);
         $order_product = $this->orderObj->getProductOfOrder($id);
-        return view('order.orderedit')->with('order',$order)->with('allProduct',$allproduct)->with('order_product',$order_product);        
+        return view('order.edit')->with('order',$order)->with('allProduct',$allproduct)->with('order_product',$order_product);        
     }
 
     /**

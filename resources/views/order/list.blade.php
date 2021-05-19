@@ -3,7 +3,6 @@
     @if (Session::has('successMsg'))
         <script type="text/javascript">
             alert({{ Session::get('successMsg') }});
-
         </script>
     @endif
     <div class="container">
@@ -12,8 +11,7 @@
                 <h3>QUẢN LÝ ĐƠN HÀNG</h3>
             </div>
             <div class="btnAdd col-sm-6">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addOrderModal">Thêm đơn
-                    hàng</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addOrderModal">Thêm đơn hàng</button>
             </div>
             <div class="search col-sm-6 d-flex justify-content-end">
                 <form action="{{ route('order.search') }}" data-url="{{ route('order.search') }}"
@@ -70,8 +68,8 @@
         </div>
     </div>
     {{-- modal --}}
-    @include('order.ordercreate')
-    @include('order.orderinfo')
+    @include('order.create')
+    @include('order.info')
     <script src="{{ asset('js/delete_order.js') }}"></script>
     {{-- Modal sửa --}}
 @endsection
