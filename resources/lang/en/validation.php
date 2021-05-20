@@ -130,9 +130,25 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'name' => [
+            'required' => 'Vui lòng nhập tên khách hàng',
         ],
+        'email' => [
+            'required' => 'Vui lòng nhập email khách hàng',
+        ],
+        'phone' => [
+            'numeric' => 'Vui lòng nhập số',
+             'min' => 'Số điện thoại không đúng'
+        ],
+        'address' => [
+            'required' => 'Vui lòng nhập địa chỉ khách hàng',
+        ],
+        'avatar' => [
+            'required' => 'Bạn cần nhập ảnh khách hàng',
+             'mimes' => 'Định dạng không hợp lệ',
+             'max'=> 'Ảnh quá lớn'
+        ],
+       
     ],
 
     /*

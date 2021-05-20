@@ -11,7 +11,7 @@
                 <h3>QUẢN LÝ ĐƠN HÀNG</h3>
             </div>
             <div class="btnAdd col-sm-6">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addOrderModal">Thêm đơn hàng</button>
+                <a href="{{route('order.create')}}"><button type="button" class="btn btn-primary">Thêm đơn hàng</button></a>
             </div>
             <div class="search col-sm-6 d-flex justify-content-end">
                 <form action="{{ route('order.search') }}" data-url="{{ route('order.search') }}"
@@ -27,6 +27,7 @@
         <div class="row">
             <div class="table-field col-sm-12 mt-3">
                 <table class="table">
+                    
                     <thead>
                         <tr>
                             <th scope="col">Mã đơn hàng</th>
@@ -68,7 +69,6 @@
         </div>
     </div>
     {{-- modal --}}
-    @include('order.create')
     @include('order.info')
     <script src="{{ asset('js/delete_order.js') }}"></script>
     {{-- Modal sửa --}}

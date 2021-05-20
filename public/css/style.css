@@ -9,6 +9,9 @@
   label{
     font-weight: bold;
   }
+  .error{
+    color: rgb(196, 30, 30);
+  }
  
   
   

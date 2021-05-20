@@ -22,6 +22,7 @@
     @yield('order-management')
     <script src={{ asset('ckeditor/ckeditor.js') }}></script>
     <script src="{{ asset('js/file.js') }}"></script>
+    <script src="{{ asset('js/create.js') }}"></script>
     <script src="{{ asset('js/delete_order.js') }}"></script>
     <script src="{{ asset('js/info.js') }}"></script>
     <script src="{{ asset('js/edit.js') }}"></script>

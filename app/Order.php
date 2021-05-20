@@ -43,23 +43,22 @@ class Order extends Model
         $alert = "Sửa thành công!";
         $order->save();
     }
-    public function storeOrder($namecustomer,$avatar,$phone,$email,$address,$note, $name_product,$price,$quantity,$total){
-        $this->namecustomer = $namecustomer;
-        $this->avatar = $avatar;
-        $this->phone = $phone;
-        $this->email = $email;
-        $this->address = $address;
-        $this->avatar = $avatar;
-        $this->note = $note;
+    public function storeOrder($customer, $productIds,$price,$quantity){
+        $this->namecustomer = $customer['namecustomer'];
+        $this->avatar = $customer['avatar'];
+        $this->phone = $customer['phone'];
+        $this->email =  $customer['email'];
+        $this->address = $customer['address'];
+        $this->note = $customer['note'];
         $this->save();
-        $arr_name_pro = $name_product;
-        $arr_price_pro = $price;
-        $arr_qty_pro = $quantity;
-        $arr_total_pro = $total;
+        $arrIdPro = $productIds;
+        $arrPricePro = $price;
+        $arrQtyPro = $quantity;
 
-            for($i = 0 ; $i < count($arr_name_pro);$i++){          
-            $productDB =   Product::where('name', $arr_name_pro[$i])->get();
-            $this->product()->attach($productDB,['total_product'=>$arr_qty_pro[$i],'price'=> $arr_price_pro[$i],'total_price' => $arr_total_pro[$i]]);
+            for($i = 0 ; $i < count($arrIdPro);$i++){          
+            $productDB =   Product::find($arrIdPro[$i]);
+            $totalPrice =   intval($arrQtyPro[$i])*intval($arrPricePro[$i]);
+            $this->product()->attach($productDB,['total_product'=>$arrQtyPro[$i],'price'=> $arrPricePro[$i],'total_price' => $totalPrice]);
         }
         $this->totalprice = Order::find($this->id)->product()->sum('total_price');
         $this->totalproduct = Order::find($this->id)->product()->sum('total_product');

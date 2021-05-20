@@ -26,7 +26,9 @@ class OrderController extends Controller
     public function index()
     {
         //
-        return view('order.list')->with('products',$this->productObj->getAllProduct())->with('orders',$this->orderObj->getAllOrderPaginate());
+        $orders = $this->orderObj->getAllOrderPaginate();
+        $products = $this->productObj->getAllProduct();
+        return view('order.list')->with('products', $products)->with('orders', $orders);
        
     }
     public function search(Request $request){
@@ -44,6 +46,8 @@ class OrderController extends Controller
     public function create()
     {
         //    
+        $products = $this->productObj->getAllProduct();
+        return view('order.create')->with('products', $products);
     }
 
     /**
@@ -55,22 +59,40 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required',
+            'email' =>'required|email:rfc,dns',
+            'avatar' => 'required|mimes:jpg,png|max:100000',
+            'phone' => 'required|min:10|numeric|',
+            'address' => 'required',
+        ]);
+        
+        $customer = array();
+
         $namecustomer = $request->name;
+        $customer['namecustomer'] = $namecustomer;
         $phone = $request->phone;
+        $customer['phone'] = $phone;
         $email = $request->email;
+        $customer['email'] = $email;
         $address = $request->address;
+        $customer['address'] = $address;
         $note= $request->note;
+        $customer['note'] = $note;
+
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');    
             $file->move('uploads',$file->getClientOriginalName());
             $avatar = $file->getClientOriginalName();
+            $customer['avatar'] = $avatar;
         }
-        $arr_name_pro = $request->name_product;
-        $arr_price_pro = $request->price;
-        $arr_qty_pro = $request->quantity;
-        $arr_total_pro = $request->total;
-        $this->orderObj->storeOrder($namecustomer,$avatar,$phone,$email,$address,$note,$arr_name_pro,$arr_price_pro,$arr_qty_pro,$arr_total_pro);  
-        return redirect()->route('order.index')->with('successMsg','Thêm mới thành công!');
+      
+        
+        $arrIdPro = $request->productIds;
+        $arrPricePro = $request->prices;
+        $arrQtyPro = $request->quantities;
+        $this->orderObj->storeOrder($customer,$arrIdPro,$arrPricePro,$arrQtyPro);  
+        return redirect()->route('order.index');
     
     }
    
@@ -117,7 +139,12 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         //  
-      
+        $request->validate([
+            'name' => 'required',
+            'email' =>'required|email:rfc,dns',
+            'phone' => 'required|min:10|numeric|',
+            'address' => 'required',
+        ]);
         $namecustomer = $request->name;
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');

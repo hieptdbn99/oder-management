@@ -13,13 +13,14 @@
                         <label for="" class="d-block mb-3">
                             <h4>Sản phẩm</h4>
                         </label>
-                        <select class="form-select" id="select-product-edit" aria-label="Default select example">
+                        <select class="form-select" id="select-product-edit" name="name-product"
+                            aria-label="Default select example">
                             @foreach ($allProduct as $eachProduct)
                                 <option value={{ $eachProduct->name }}>{{ $eachProduct->name }}</option>
                             @endforeach
                         </select>
-                        <input aria-label="quantity" id="add-qty-edit" min="1" type="number" value="1">
-                        <input id="add-price-edit" type="number">
+                        <input aria-label="quantity" name="quantity" id="add-qty-edit" min="1" type="number" value="1">
+                        <input id="add-price-edit" name="price" type="number">
                         <a type="submit" href="{{ route('addProduct') }}" class="addListProEdit"
                             data-url="{{ route('addProduct') }}"><i class="fas fa-plus-square"></i></a>
                     </div>
@@ -43,9 +44,9 @@
                                             <td><a href="" class="edit_product"
                                                     data-url="{{ route('editProduct', [$item->order_id, $item->product_id]) }}"
                                                     data-toggle="modal" data-target="#editProduct">
-                                                      <i class="fas fa-edit mr-2 "></i></a><a href="" class="remove_product"
+                                                    <i class="fas fa-edit mr-2 "></i></a><a href="" class="remove_product"
                                                     data-url="{{ route('removeProduct', [$item->order_id, $item->product_id]) }}">
-                                                      <i class="fas fa-trash-alt " style="color: red"></i></a></td>
+                                                    <i class="fas fa-trash-alt " style="color: red"></i></a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -56,8 +57,11 @@
                         <label for="">
                             <h4>Họ và tên khách hàng</h4>
                         </label>
-                        <input type="text" name="name" class="form-control" required id="input-name-edit"
+                        <input type="text" name="name" class="form-control" id="input-name-edit"
                             value="{{ $order->namecustomer }}">
+                        @error('name')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
                         <input type="hidden" name="idHidden" id="id_order" value="{{ $order->id }}">
                     </div>
                     <div class="form-group">
@@ -68,19 +72,28 @@
                     </div>
                     <div class="form-group">
                         <label for="">Email</label>
-                        <input type="email" name="email" class="form-control" required id="input-email-edit"
+                        <input type="email" name="email" class="form-control" id="input-email-edit"
                             value="{{ $order->email }}">
+                        @error('email')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="">Số điện thoại</label>
-                        <input type="text" name="phone" class="form-control" required id="input-phone-edit"
+                        <input type="text" name="phone" class="form-control" id="input-phone-edit"
                             value="{{ $order->phone }}">
+                        @error('phone')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="">Địa chỉ</label>
-                        <input type="text" name="address" class="form-control" required id="input-address-edit"
+                        <input type="text" name="address" class="form-control" id="input-address-edit"
                             value="{{ $order->address }}">
                     </div>
+                    @error('address')
+                        <div class="error">{{ $message }}</div>
+                    @enderror
                     <div class="form-group">
                         <label for="">Ghi chú</label>
                         <textarea name="note" id="text_edit_note">{{ $order->note }}</textarea>
