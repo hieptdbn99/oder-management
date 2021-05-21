@@ -7,3 +7,4 @@ CKEDITOR.replace( 'note', {
     filebrowserImageUploadUrl: "{{ route('ckfinder_connector') }}?command=QuickUpload&type=Images",
     filebrowserFlashUploadUrl: "{{ route('ckfinder_connector') }}?command=QuickUpload&type=Flash",
 } );
+

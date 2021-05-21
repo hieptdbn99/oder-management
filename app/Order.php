@@ -50,6 +50,7 @@ class Order extends Model
         $this->email =  $customer['email'];
         $this->address = $customer['address'];
         $this->note = $customer['note'];
+        $this->date = $customer['date'];
         $this->save();
         $arrIdPro = $productIds;
         $arrPricePro = $price;

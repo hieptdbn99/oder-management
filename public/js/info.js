@@ -28,17 +28,18 @@ var info = function(){
               url: url,
               dataType: 'json',
               success: function(respone){
-                $('#info_name').html(respone.order_data.namecustomer);
-                $('#info_avatar').attr('src','../uploads/'+respone.order_data.avatar);
-                $('#info_email').html(respone.order_data.email);
-                $('#info_phone').html(respone.order_data.phone);
-                $('#info_address').html(respone.order_data.address);
-                $('#info_note').html(respone.order_data.note);
+                $('#info_name').html(respone.orderData.namecustomer);
+                $('#info_avatar').attr('src','../uploads/'+respone.orderData.avatar);
+                $('#info_email').html(respone.orderData.email);
+                $('#info_phone').html(respone.orderData.phone);
+                $('#info_address').html(respone.orderData.address);
+                $('#info_note').html(respone.orderData.note);
+                $('#info_date').html(getFormattedDate(new Date(respone.orderData.date)));
   
-                $('#info_total_price').html(respone.order_data.totalprice+" đ")
+                $('#info_total_price').html(respone.orderData.totalprice+" đ")
               
-                for (i = 0; i < respone.order_product_data.length; i++) {
-                  var msg_edit = '<tr class="tr-info-order"><td>'+respone.product_data[i].name+'</td>'+'<td>'+respone.order_product_data[i].price+'</td><td>'+respone.order_product_data[i].total_product+'</td></tr>'
+                for (i = 0; i < respone.orderProductData.length; i++) {
+                  var msg_edit = '<tr class="tr-info-order"><td>'+respone.productData[i].name+'</td>'+'<td>'+respone.orderProductData[i].price+'</td><td>'+respone.orderProductData[i].total_product+'</td></tr>'
                    $('.editProduct').append(msg_edit);
                 }
                
@@ -50,6 +51,13 @@ var info = function(){
             })
             
           })
+          function getFormattedDate(date) {
+            let year = date.getFullYear();
+            let month = (1 + date.getMonth()).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+          
+            return day + '/' + month + '/' + year;
+        }
          
     }
 }

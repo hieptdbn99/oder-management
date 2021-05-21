@@ -9,33 +9,65 @@ var create = function(){
     this.init = function(){
         el.btnAddPro = $('#add_row');
         el.btnSubmit = $('#add-order-form');
-        el.deletePro = $('.del');
     }
     this.bindEvent = function(){
         createPro();
         createOrder();
-        deletePro();
+        totalEach();
     }
 
     var createPro = function(){
+        var sum = 0;
         el.btnAddPro.click(function(e){
             e.preventDefault();
-          
-              console.log("hello")
-              console.log($('.hiden-tr').html());
               $('.addRow').append($('.hiden-tr').html())
+              deletePro();
+              totalEach();
               
         })
+
     }
+    // var totalPrice = function(sum){
+    //     sum += pas
+    // }
     var deletePro = function(){
-        el.deletePro.click(function(e){
+        $('.del').click(function(e){
             e.preventDefault();
-            console.log("hello")
-          
-             $(this).parent().parent().remove();
-              
+            $(this).parent().parent().remove()
+            totalPrice()
         })
     }
+    var totalEach = function(){
+        $(".input-price").change(function(){
+            var price =$(this).val()
+            var qty = $(this).parent().siblings('.td-qty').children('.input-quantity').val()
+            totalEachPrice = price*qty
+            $(this).parent().siblings('.td-totalEach').html(totalEachPrice);
+            totalPrice();
+          
+
+           
+        });
+        $(".input-quantity").change(function(){
+            var price =$(this).val()
+            var qty = $(this).parent().siblings('.td-price').children('.input-price').val()
+            totalEachPrice = price*qty
+            $(this).parent().siblings('.td-totalEach').html(totalEachPrice);
+            // console.log($('.td-totalEach').html())
+            totalPrice()
+        });
+    }
+    function totalPrice(){
+        sum = 0;
+        var eachProduct = document.getElementsByClassName('td-totalEach')
+        console.log(eachProduct);
+        for(var i = 0 ; i < eachProduct.length;i++){
+            if(!isNaN(parseInt((eachProduct[i]).innerHTML))){
+                sum+= parseInt((eachProduct[i]).innerHTML);
+            }
+        }
+        $('#total-price').html(sum+' đ')
+    };
 
     var createOrder =function(){
         el.btnSubmit.submit(function(e){
@@ -64,4 +96,9 @@ var create = function(){
     $(document).ready(function () {
         var createObj = new create();
         createObj.run();
+
+
+
+       
+
     });

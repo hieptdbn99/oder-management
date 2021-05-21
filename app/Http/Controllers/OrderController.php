@@ -65,6 +65,7 @@ class OrderController extends Controller
             'avatar' => 'required|mimes:jpg,png|max:100000',
             'phone' => 'required|min:10|numeric|',
             'address' => 'required',
+            'date' => 'required',
         ]);
         
         $customer = array();
@@ -79,7 +80,8 @@ class OrderController extends Controller
         $customer['address'] = $address;
         $note= $request->note;
         $customer['note'] = $note;
-
+        $date = $request->date;
+        $customer['date'] = $date;
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');    
             $file->move('uploads',$file->getClientOriginalName());
@@ -109,8 +111,8 @@ class OrderController extends Controller
         
         $orderFindId = $this->orderObj->getOrderById($id);
         $product = $this->orderObj->getProductByIdOrder($id);
-        $order_product = $this->orderObj->getOrderProduct($id);
-        return response()->json([ 'order_data' => $orderFindId,'product_data' => $product,'order_product_data'=>$order_product]);
+        $orderProduct = $this->orderObj->getOrderProduct($id);
+        return response()->json([ 'orderData' => $orderFindId,'productData' => $product,'orderProductData'=>$orderProduct]);
     }
 
     /**
@@ -125,8 +127,8 @@ class OrderController extends Controller
         $order = $this->orderObj->getOrderById($id);
         $allproduct = $this->productObj->getAllProduct();
         $product = $this->orderObj->getProductByIdOrder($id);
-        $order_product = $this->orderObj->getProductOfOrder($id);
-        return view('order.edit')->with('order',$order)->with('allProduct',$allproduct)->with('order_product',$order_product);        
+        $orderProduct = $this->orderObj->getProductOfOrder($id);
+        return view('order.edit')->with('order',$order)->with('allProduct', $allproduct)->with('orderProduct', $orderProduct);        
     }
 
     /**
@@ -145,7 +147,7 @@ class OrderController extends Controller
             'phone' => 'required|min:10|numeric|',
             'address' => 'required',
         ]);
-        $namecustomer = $request->name;
+        $nameCustomer = $request->name;
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');
             $file->move('uploads',$file->getClientOriginalName());
@@ -157,7 +159,7 @@ class OrderController extends Controller
         $phone = $request->phone;
         $address= $request->address;
         $note = $request->note;
-        $this->orderObj->updateOrder($id,$namecustomer,$avatar,$phone,$email,$address,$note);
+        $this->orderObj->updateOrder($id,$nameCustomer,$avatar,$phone,$email,$address,$note);
         return redirect()->route('order.index');
     }
 
@@ -175,31 +177,31 @@ class OrderController extends Controller
             return response()->json(['data'=>'remove'],200);
             
     }
-    public function removeProduct($order_id,$product_id){
-        $this->orderObj->deleteProductOfOrder($order_id,$product_id);
+    public function removeProduct($orderId,$productId){
+        $this->orderObj->deleteProductOfOrder($orderId,$productId);
         return response()->json(['data'=>'remove'],200);
 
     }
-    public function editProduct($order_id,$product_id){
+    public function editProduct($orderId,$productId){
         
-        $order_product = $this->orderObj->getEditProductOrder($order_id,$product_id);
-        $product = $this->productObj->getProductById($product_id);
-        return response()->json(['data'=>$order_product,'product'=>$product],200);
+        $orderProduct = $this->orderObj->getEditProductOrder($orderId,$productId);
+        $product = $this->productObj->getProductById($productId);
+        return response()->json(['data'=>$orderProduct,'product'=>$product],200);
     }
     public function addProduct(Request $request){
         $order = new Order();
         $product = new Product();
-        $get_order = $order->getOrderById($request->order_id);
-        $get_pr_by_name= $product ->getProductByName($request->name_product);
-        $get_order->product()->attach($get_pr_by_name,['total_product'=>$request->quantity,'price'=> $request->price,'total_price' => $request->total]);
+        $getOrder = $order->getOrderById($request->order_id);
+        $getPrByName= $product ->getProductByName($request->name_product);
+        $getOrder->product()->attach($getPrByName,['total_product'=>$request->quantity,'price'=> $request->price,'total_price' => $request->total]);
         return response()->json(['data'=>"ok"],200);
     }
-    public function updateProduct(Request $request, $order_id,$product_id)
+    public function updateProduct(Request $request, $orderId,$productId)
     {
         //
   
         $order = new Order();
-        $order-> updateProductInOrder($order_id,$product_id,$request->total_product,$request->price,$request->total);
+        $order-> updateProductInOrder($orderId,$productId,$request->total_product,$request->price,$request->total);
         //     $order->totalprice = Order::find($order->id)->product()->sum('total_price');
         //     $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
             return response()->json(['data'=>"ok"],200);

@@ -32,6 +32,10 @@
                     <p id="info_address"></p>
                 </div>
                 <div class="form-group">
+                    <label for="">Ngày đặt hàng</label>
+                    <p id="info_date"></p>
+                </div>
+                <div class="form-group">
                     <label for="">Ghi chú</label>
                     <p id="info_note"></p>
                 </div>
@@ -63,3 +67,4 @@
         </div>
     </div>
 </div>
+<script src="{{asset('js/info.js')}}"></script>

@@ -1,4 +1,4 @@
-@extends('layout.master');
+@extends('layout.master')
 @section('order-management')
     @if (Session::has('successMsg'))
         <script type="text/javascript">
@@ -47,7 +47,7 @@
                                 <td>{{ $order->phone }}</td>
                                 <td>{{ $order->totalproduct }}</td>
                                 <td>{{ $order->totalprice }}</td>
-                                <td>{{ $order->created_at }}</td>
+                                <td>{{ date("d/m/Y", strtotime($order->date)) }}</td>
                                 <td>
                                     <a href="" class="infoOrder" data-url="{{ route('order.show', $order->id) }}"
                                         data-toggle="modal" data-target="#infoOrderModal"

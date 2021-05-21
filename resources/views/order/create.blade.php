@@ -1,4 +1,4 @@
-@extends('layout.master');
+@extends('layout.master')
 @section('order-management')
     <div class="container">
         <div class="row mb-5">
@@ -14,7 +14,7 @@
                 @csrf
                 @method('post')
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-12">
                         <div class="customer mb-3">
                             <h3>Khách hàng</h3>
                         </div>
@@ -61,6 +61,14 @@
                                 <div class="error">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="">Ngày đặt hàng</label>
+                            <input type="date" name="date" value="{{ old('date') }}" class="form-control"
+                                id="input-date">
+                            @error('date')
+                                <div class="error">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <textarea name="note" id="text"></textarea>
                         @include('ckfinder::setup')
                     </div>
@@ -93,43 +101,24 @@
             </table>
         </div> --}}
 
-                    <div class="col-sm-7">
-                        <div class="customer mb-3">
+                    <div class="col-sm-12">
+                        <div class="product mt-3 mb-3">
                             <h3>Sản phẩm</h3>
                         </div>
                         <div class="card-body">
-                            <table class="table" id="products_table">
+                            <table class="table product-table" id="products-table">
                                 <thead>
                                     <tr>
                                         <th>Sản phẩm </th>
                                         <th>Số lượng</th>
                                         <th>Đơn giá</th>
                                         <th>Thành tiền</th>
+                                        <th></th>
+
                                     </tr>
                                 </thead>
                                 <tbody class="addRow">
-                                    <tr class="productRow">
-                                        <td>
-                                            <select name="productIds[]" class="form-control">
-                                                <option value="">Sản phẩm</option>
-                                                @foreach ($products as $product)
-                                                    <option value="{{ $product->id }}">
-                                                        {{ $product->name }}
-
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="quantities[]" class="form-control" />
-                                        <td> <input type="text" name="prices[]" class="form-control" /></td>
-
-
-                                        </td>
-                                        <td> <input type="button" class="del" value="Delete" /></td>
-
-                                        </td>
-                                    </tr>
+                                   
                                     @if ($errors->has('productIds') || $errors->has('quantities') || $errors->has('prices'))
                                         <tr>
                                             <div class="error"> Mời bạn nhập đúng và đủ số lượng, đơn giá cho sản phẩm</div>
@@ -139,10 +128,12 @@
 
                                 </tbody>
                             </table>
-
+                            <div class="row">
+                                <span class="d-flex"><p  class="font-weight-bold d-inline mr-2">Thành tiền: <p> <p id="total-price"><p></span>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button id="add_row" class="btn btn-default pull-left">+ Add Row</button>
+                                    <button id="add_row" class="btn btn-default pull-left">+ Thêm hàng</button>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +147,7 @@
         </div>
     </div>
 
-    <table class="table table-light">
+    <table class="table product-table table-light">
         <tbody class="hiden-tr d-none">
             <tr>
                 <td>
@@ -170,18 +161,19 @@
                         @endforeach
                     </select>
                 </td>
-                <td>
-                    <input type="number" required name="quantities[]" class="form-control" />
+                <td class="td-qty">
+                    <input type="number" class="input-quantity" required name="quantities[]" class="form-control" />
                 </td>
-                <td> <input type="text"  required name="prices[]" class="form-control" />
+                <td class="td-price"> <input type="text"  required class="input-price" name="prices[]" class="form-control" />
                 </td>
-                <td> <input type="button" class="del" value="Delete" /></td>
-
+                <td class="td-totalEach"></td>
+                <td>  <input type="button" class="del btn btn-danger" value="Delete" /></td>
                 </td>
-
-
             </tr>
 
 
         </tbody>
     </table>
+    <script src="{{asset('js/create.js')}}"></script>
+
+    @endsection

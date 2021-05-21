@@ -1,4 +1,4 @@
-@extends('layout.master');
+@extends('layout.master')
 @section('order-management')
     <div class="container">
         <div class="row">
@@ -13,16 +13,7 @@
                         <label for="" class="d-block mb-3">
                             <h4>Sản phẩm</h4>
                         </label>
-                        <select class="form-select" id="select-product-edit" name="name-product"
-                            aria-label="Default select example">
-                            @foreach ($allProduct as $eachProduct)
-                                <option value={{ $eachProduct->name }}>{{ $eachProduct->name }}</option>
-                            @endforeach
-                        </select>
-                        <input aria-label="quantity" name="quantity" id="add-qty-edit" min="1" type="number" value="1">
-                        <input id="add-price-edit" name="price" type="number">
-                        <a type="submit" href="{{ route('addProduct') }}" class="addListProEdit"
-                            data-url="{{ route('addProduct') }}"><i class="fas fa-plus-square"></i></a>
+
                     </div>
                     <div class="form-group">
                         <div class="">
@@ -36,21 +27,51 @@
                                     </tr>
                                 </thead>
                                 <tbody class="editProduct">
-                                    @foreach ($order_product as $item)
+                                    @foreach ($orderProduct as $item)
                                         <tr>
-                                            <td>{{ $item->name }}</td>
-                                            <td id="show-price-edit">{{ $item->price }}</td>
-                                            <td id="show-quantity-edit">{{ $item->total_product }}</td>
-                                            <td><a href="" class="edit_product"
-                                                    data-url="{{ route('editProduct', [$item->order_id, $item->product_id]) }}"
-                                                    data-toggle="modal" data-target="#editProduct">
-                                                    <i class="fas fa-edit mr-2 "></i></a><a href="" class="remove_product"
-                                                    data-url="{{ route('removeProduct', [$item->order_id, $item->product_id]) }}">
-                                                    <i class="fas fa-trash-alt " style="color: red"></i></a></td>
+
+                                            <td>
+                                                <select name="productIds[]" class="form-control">
+                                                    @foreach ($allProduct as $product)
+                                                        <option value="{{ $product->id }}" @if ($product->id == $item->product_id) selected @endif>
+                                                            {{ $product->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td class="td-qty">
+                                                <input type="number" class="input-quantity" required name="quantities[]"
+                                                    class="form-control" value="{{ $item->total_product }}" />
+                                            </td>
+                                            <td class="td-price"> <input type="text" required class="input-price"
+                                                    name="prices[]" class="form-control" value="{{ $item->price }}" />
+                                            </td>
+                                            <td class="td-totalEach"></td>
+
+                                            <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
+
+                                            </td>
+
+
+
+
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="row">
+                                <span class="d-flex">
+                                    <p class="font-weight-bold d-inline mr-2">Thành tiền:
+                                    <p>
+                                    <p id="total-price">
+                                    <p>
+                                </span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button id="add_row" class="btn btn-default pull-left">+ Add Row</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -107,46 +128,33 @@
         </div>
     </div>
     {{-- modal --}}
-    <div class="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Sửa sản phẩm</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" id="form-edit-product"
-                        data-url="{{ route('updateProduct', [$item->order_id, $item->product_id]) }}"
-                        enctype="multipart/form-data" method="post">
-                        @csrf
-                        <div class="form-group">
-                            <label for="">Sản phẩm</label>
-                            <h4 class="show-name-product">
-                                <h4>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Số lượng</label>
-                            <input type="number" min="1" max="9999" name="quantity_edit"
-                                class="form-control input_qty_edit">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Đơn giá</label>
-                            <input type="number" name="price_edit" class="form-control input_price_edit">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="" class="btn btn-primary submit-edit-product">Sửa</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src=""></script>
-    <script src="{{ asset('js/create.js') }}"></script>
+    <table class="table product-table table-light">
+        <tbody class="hidden-tr d-none">
+            <tr>
+                <td>
+                    <select name="productIds[]" class="form-control">
+                        @foreach ($allProduct as $product)
+                            <option value="{{ $product->id }}">
+                                {{ $product->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </td>
+                <td class="td-qty">
+                    <input type="number" class="input-quantity" required name="quantities[]" class="form-control" />
+                </td>
+                <td class="td-price"> <input type="text" required class="input-price" name="prices[]"
+                        class="form-control" />
+                </td>
+                <td class="td-totalEach"></td>
+
+                <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+    <script src="{{ asset('js/edit.js') }}"></script>
     <script>
         // "global" vars, built using blade
         var flagsUrl = '{{ URL::asset('order/updateproduct') }}';
