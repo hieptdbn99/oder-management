@@ -16,6 +16,8 @@ var edit = function(){
         orderEditSubmit();
         createPro();
         deletePro();
+        totalEach();
+        
 
     }
     var createPro = function(){
@@ -26,7 +28,8 @@ var edit = function(){
             $('.editProduct').append($('.hidden-tr').html())
             deletePro();
             // totalEach();
-            
+            totalEach();
+
       })
 
   }
@@ -34,8 +37,38 @@ var edit = function(){
     $('.del').click(function(e){
         e.preventDefault();
         $(this).parent().parent().remove()
+        totalPrice()
     })
 }
+var totalEach = function(){
+  $(".input-price").change(function(){
+      var price =$(this).val()
+      var qty = $(this).parent().siblings('.td-qty').children('.input-quantity').val()
+      totalEachPrice = price*qty
+      $(this).parent().siblings('.td-totalEach').html(totalEachPrice);
+      totalPrice();
+  
+  });
+  $(".input-quantity").change(function(){
+      var price =$(this).val()
+      var qty = $(this).parent().siblings('.td-price').children('.input-price').val()
+      totalEachPrice = price*qty
+      $(this).parent().siblings('.td-totalEach').html(totalEachPrice);
+      // console.log($('.td-totalEach').html())
+      totalPrice()
+  });
+}
+function totalPrice(){
+  sum = 0;
+  var eachProduct = document.getElementsByClassName('td-totalEach')
+  console.log(eachProduct);
+  for(var i = 0 ; i < eachProduct.length;i++){
+      if(!isNaN(parseInt((eachProduct[i]).innerHTML))){
+          sum+= parseInt((eachProduct[i]).innerHTML);
+      }
+  }
+  $('#total-price').html(sum+' đ')
+};
     
     var orderEditSubmit = function(){
         el.btnSubmitOrder.click(function(e){

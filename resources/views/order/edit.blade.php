@@ -23,7 +23,7 @@
                                         <th>Tên sản phẩm</th>
                                         <th>Giá thành</th>
                                         <th>số lượng</th>
-                                        <th>Tùy chọn</th>
+                                        <th>Thành tiền</th>
                                     </tr>
                                 </thead>
                                 <tbody class="editProduct">
@@ -46,7 +46,7 @@
                                             <td class="td-price"> <input type="text" required class="input-price"
                                                     name="prices[]" class="form-control" value="{{ $item->price }}" />
                                             </td>
-                                            <td class="td-totalEach"></td>
+                                            <td class="td-totalEach">{{$item->total_price}}</td>
 
                                             <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
 
@@ -60,18 +60,20 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <span class="d-flex">
-                                    <p class="font-weight-bold d-inline mr-2">Thành tiền:
-                                    <p>
-                                    <p id="total-price">
-                                    <p>
-                                </span>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-12">
-                                    <button id="add_row" class="btn btn-default pull-left">+ Add Row</button>
+                                    <button id="add_row" class="btn btn-secondary pull-left">+ Add Row</button>
                                 </div>
                             </div>
+                            <div class="row mt-3">
+                                <span class="d-flex">
+                                    <p class="font-weight-bold d-inline mr-2">Thành tiền:
+                                    </p>
+                                    <p id="total-price">
+                                        {{$order->totalprice}}
+                                    </p>
+                                </span>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="form-group">

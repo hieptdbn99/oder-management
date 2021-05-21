@@ -18,14 +18,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('order', 'OrderController');
-Route::post('order/addproduct', 'OrderController@addProduct')->name('addProduct');
+Route::resource('order', 'OrderController')->middleware('XssSanitizer');
 Route::post('order/search', 'OrderController@search')->name('order.search');
-
-Route::delete('order/removeproduct/{order_id}/{product_id}', 'OrderController@removeProduct')->name('removeProduct');
-Route::get('order/editproduct/{order_id}/{product_id}', 'OrderController@editProduct')->name('editProduct');
-Route::put('order/updateproduct/{order_id}/{product_id}', 'OrderController@updateProduct')->name('updateProduct');
-
 Auth::routes(); 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::any('/ckfinder/connector', '\CKSource\CKFinderBridge\Controller\CKFinderController@requestAction')
@@ -33,6 +27,5 @@ Route::any('/ckfinder/connector', '\CKSource\CKFinderBridge\Controller\CKFinderC
 
 Route::any('/ckfinder/browser', '\CKSource\CKFinderBridge\Controller\CKFinderController@browserAction')
     ->name('ckfinder_browser');
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
