@@ -72,35 +72,6 @@
                         <textarea name="note" id="text"></textarea>
                         @include('ckfinder::setup')
                     </div>
-                    {{-- <div class="form-group">
-            <label for="" class="d-block mt-2">Sản phẩm</label>
-            <select class="form-select" id="select-product" aria-label="Default select example">
-                @foreach ($products as $product)
-                    <option value={{ $product->name }}>{{ $product->name }}</option>
-                @endforeach
-            </select>
-            <input aria-label="quantity" id="input-qty" min="1" max="9999" type="number" value="1">
-            <input id="input-price" name = "eachPrice" type="text" placeholder="Đơn giá">
-            <a href="" class="addListPro"><i class="fas fa-plus-square"></i></a>
-            @error('eachPrice')
-                <div style="color: red">Bạn phải thêm sản phẩm để hoàn tất đơn hàng<div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <table class="table">
-                <thead>
-                    <tr>
-                       <th scope="col">Sản phẩm</th>
-                        <th scope="col">Số lượng</th>
-                        <th scope="col">Đơn giá</th>
-                        <th scope="col">Thành tiền</th>
-                    </tr>
-                </thead>
-                <tbody id="render-product">
-                </tbody>
-            </table>
-        </div> --}}
-
                     <div class="col-sm-12">
                         <div class="product mt-3 mb-3">
                             <h3>Sản phẩm</h3>
@@ -114,11 +85,38 @@
                                         <th>Đơn giá</th>
                                         <th>Thành tiền</th>
                                         <th></th>
-
                                     </tr>
                                 </thead>
                                 <tbody class="addRow">
-                                   
+                                    @foreach (old('productIds', ['']) as $index => $oldProduct)
+
+                                        <tr>
+                                            <td>
+                                                <select name="productIds[]" class="form-control">
+                                                    <option value="">Sản phẩm</option>
+                                                    @foreach ($products as $product)
+                                                        <option value="{{ $product->id }}"
+                                                            {{ $oldProduct == $product->id ? ' selected' : '' }}>
+                                                            {{ $product->name }}
+
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td class="td-qty">
+                                                <input type="number" class="input-quantity" required name="quantities[]"
+                                                    class="form-control"
+                                                    value="{{ old('quantities.' . $index) ?? '' }}" />
+                                            </td>
+                                            <td class="td-price"> <input type="text" required class="input-price"
+                                                    value="{{ old('prices.' . $index) ?? '' }}" name="prices[]"
+                                                    class="form-control" />
+                                            </td>
+                                            <td class="td-totalEach">{{ old('quantities.' . $index) *  old('prices.' . $index)  }}</td>
+                                            <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     @if ($errors->has('productIds') || $errors->has('quantities') || $errors->has('prices'))
                                         <tr>
                                             <div class="error"> Mời bạn nhập đúng và đủ số lượng, đơn giá cho sản phẩm</div>
@@ -129,7 +127,12 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <span class="d-flex"><p  class="font-weight-bold d-inline mr-2">Thành tiền: <p> <p id="total-price"><p></span>
+                                <span class="d-flex">
+                                    <p class="font-weight-bold d-inline mr-2">Thành tiền:
+                                    <p>
+                                    <p id="total-price">
+                                    <p>
+                                </span>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -164,16 +167,17 @@
                 <td class="td-qty">
                     <input type="number" class="input-quantity" required name="quantities[]" class="form-control" />
                 </td>
-                <td class="td-price"> <input type="text"  required class="input-price" name="prices[]" class="form-control" />
+                <td class="td-price"> <input type="text" required class="input-price" name="prices[]"
+                        class="form-control" />
                 </td>
                 <td class="td-totalEach"></td>
-                <td>  <input type="button" class="del btn btn-danger" value="Delete" /></td>
+                <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
                 </td>
             </tr>
 
 
         </tbody>
     </table>
-    <script src="{{asset('js/create.js')}}"></script>
+    <script src="{{ asset('js/create.js') }}"></script>
 
-    @endsection
+@endsection

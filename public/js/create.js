@@ -14,6 +14,8 @@ var create = function(){
         createPro();
         createOrder();
         totalEach();
+        totalPrice();
+
     }
 
     var createPro = function(){

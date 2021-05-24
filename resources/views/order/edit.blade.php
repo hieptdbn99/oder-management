@@ -27,36 +27,72 @@
                                     </tr>
                                 </thead>
                                 <tbody class="editProduct">
-                                    @foreach ($orderProduct as $item)
-                                        <tr>
+                                    @if (old('productIds'))
+                                        @foreach (old('productIds', ['']) as $index => $oldProduct)
 
-                                            <td>
-                                                <select name="productIds[]" class="form-control">
-                                                    @foreach ($allProduct as $product)
-                                                        <option value="{{ $product->id }}" @if ($product->id == $item->product_id) selected @endif>
-                                                            {{ $product->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td class="td-qty">
-                                                <input type="number" class="input-quantity" required name="quantities[]"
-                                                    class="form-control" value="{{ $item->total_product }}" />
-                                            </td>
-                                            <td class="td-price"> <input type="text" required class="input-price"
-                                                    name="prices[]" class="form-control" value="{{ $item->price }}" />
-                                            </td>
-                                            <td class="td-totalEach">{{$item->total_price}}</td>
+                                            <tr>
+                                                <td>
+                                                    <select name="productIds[]" class="form-control">
+                                                        <option value="">Sản phẩm</option>
+                                                        @foreach ($allProduct as $product)
+                                                            <option value="{{ $product->id }}"
+                                                                {{ $oldProduct == $product->id ? ' selected' : '' }}>
+                                                                {{ $product->name }}
 
-                                            <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td class="td-qty">
+                                                    <input type="number" class="input-quantity" required name="quantities[]"
+                                                        class="form-control"
+                                                        value="{{ old('quantities.' . $index) ?? '' }}" />
+                                                </td>
+                                                <td class="td-price"> <input type="text" required class="input-price"
+                                                        value="{{ old('prices.' . $index) ?? '' }}" name="prices[]"
+                                                        class="form-control" />
+                                                </td>
+                                                <td class="td-totalEach">
+                                                    {{ old('quantities.' . $index) * old('prices.' . $index) }}</td>
+                                                <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        @foreach ($orderProduct as $item)
+                                            <tr class="order-edit">
 
-                                            </td>
+                                                <td>
+                                                    <select name="productIds[]" class="form-control">
+                                                        @foreach ($allProduct as $product)
+                                                            <option value="{{ $product->id }}" @if ($product->id == $item->product_id) selected @endif>
+                                                                {{ $product->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td class="td-qty">
+                                                    <input type="number" class="input-quantity" required name="quantities[]"
+                                                        class="form-control" value="{{ $item->total_product }}" />
+                                                </td>
+                                                <td class="td-price"> <input type="text" required class="input-price"
+                                                        name="prices[]" class="form-control"
+                                                        value="{{ $item->price }}" />
+                                                </td>
+                                                <td class="td-totalEach">{{ $item->total_price }}</td>
+
+                                                <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
+
+                                                </td>
 
 
 
 
-                                        </tr>
-                                    @endforeach
+                                            </tr>
+                                        @endforeach
+                                    @endif
+
+
                                 </tbody>
                             </table>
                             <div class="row">
@@ -69,11 +105,11 @@
                                     <p class="font-weight-bold d-inline mr-2">Thành tiền:
                                     </p>
                                     <p id="total-price">
-                                        {{$order->totalprice}}
+                                        {{ $order->totalprice }}
                                     </p>
                                 </span>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="form-group">

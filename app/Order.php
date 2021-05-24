@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
 class Order extends Model
 {
     //
@@ -40,6 +39,7 @@ class Order extends Model
     }
     public function updateOrder($id, $customer, $productIds, $price, $quantity)
     {
+    
         $order = Order::find($id);
         $order->namecustomer = $customer['namecustomer'];
         if ($customer['avatar'] != "") {
@@ -108,5 +108,8 @@ class Order extends Model
     public function deleteOrderProduct($id)
     {
         DB::table('order_product')->where('order_id', $id)->delete();
+    }
+    public function searchOrder($name){
+        return Order::where('namecustomer','LIKE','%'.$name.'%')->paginate(4);
     }
 }

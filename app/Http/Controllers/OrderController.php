@@ -33,10 +33,15 @@ class OrderController extends Controller
     }
     public function search(Request $request)
     {
-        // $products = Product::all();
-        // $orders = $request->all();
-        // // return view('order.orderlist')->with('products',$products)->with('orders',$orders);
-        // return response()->json(['data'=>$orders],200);
+        // $orders = $this->orderObj->getAllOrderPaginate();
+        if($request->search_name != ""){
+            $products = $this->productObj->getAllProduct();
+            $orders = $this->orderObj->searchOrder($request->search_name);
+            return view('order.list')->with('orders', $orders)->with('products', $products);
+
+        }else{
+            return redirect()->route('order.index');
+        }
     }
 
     /**

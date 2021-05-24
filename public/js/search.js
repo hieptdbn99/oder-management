@@ -7,7 +7,7 @@ var searchOrder = function(){
         this.bindEvent();
     }
     this.init = function(){
-        el.btnSearchOrder = $('.form-search');
+        el.btnSearchOrder = $('#form-search');
     }
     this.bindEvent = function(){
         searchFromOrder();
@@ -15,7 +15,6 @@ var searchOrder = function(){
 
     var searchFromOrder = function(){
         el.btnSearchOrder.submit(function(e){
-            e.preventDefault();
             var url = $(this).attr('data-url');
             var formSearch = $(this).serialize();
               $.ajax({
