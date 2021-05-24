@@ -28,18 +28,18 @@ class OrderController extends Controller
         //
         $orders = $this->orderObj->getAllOrderPaginate();
         $products = $this->productObj->getAllProduct();
-       
+
         return view('order.list')->with('products', $products)->with('orders', $orders);
     }
     public function search(Request $request)
     {
         // $orders = $this->orderObj->getAllOrderPaginate();
-        if($request->search_name != ""){
+        if ($request->search_name != "") {
             $products = $this->productObj->getAllProduct();
             $orders = $this->orderObj->searchOrder($request->search_name);
+            
             return view('order.list')->with('orders', $orders)->with('products', $products);
-
-        }else{
+        } else {
             return redirect()->route('order.index');
         }
     }
@@ -53,7 +53,7 @@ class OrderController extends Controller
     {
         //    
         $products = $this->productObj->getAllProduct();
-       
+
         return view('order.create')->with('products', $products);
     }
 
@@ -91,7 +91,7 @@ class OrderController extends Controller
         $arrPricePro = $request->prices;
         $arrQtyPro = $request->quantities;
         $this->orderObj->storeOrder($customer, $arrIdPro, $arrPricePro, $arrQtyPro);
-       
+
         return redirect()->route('order.index');
     }
 
@@ -130,7 +130,7 @@ class OrderController extends Controller
         $allproduct = $this->productObj->getAllProduct();
         $product = $this->orderObj->getProductByIdOrder($id);
         $orderProduct = $this->orderObj->getProductOfOrder($id);
-       
+
         return view('order.edit')->with('order', $order)->with('allProduct', $allproduct)->with('orderProduct', $orderProduct);
     }
     /**
@@ -170,7 +170,7 @@ class OrderController extends Controller
         $arrPricePro = $request->prices;
         $arrQtyPro = $request->quantities;
         $this->orderObj->updateOrder($id, $customer, $arrIdPro, $arrPricePro, $arrQtyPro);
-        
+
         return redirect()->route('order.index');
     }
 
@@ -184,7 +184,7 @@ class OrderController extends Controller
     {
         //
         $this->orderObj->deleteOrder($id);
-        
+
         return response()->json(['data' => 'remove'], 200);
     }
 }
