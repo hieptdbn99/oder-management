@@ -154,6 +154,14 @@
                         <div class="error">{{ $message }}</div>
                     @enderror
                     <div class="form-group">
+                        <label for="">Ngày đặt hàng</label>
+                        <input type="date" name="date" value="{{ $order->date }}" class="form-control"
+                            id="input-date">
+                        @error('date')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="">Ghi chú</label>
                         <textarea name="note" id="text_edit_note">{{ $order->note }}</textarea>
                     </div>

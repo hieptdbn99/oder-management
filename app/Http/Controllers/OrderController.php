@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Mews\Purifier\Facades\Purifier;
 
 class OrderController extends Controller
 {
@@ -22,6 +23,7 @@ class OrderController extends Controller
     {
         $this->orderObj = new Order();
         $this->productObj = new Product();
+        $this->orderProductObj = new OrderProduct();
     }
     public function index()
     {
@@ -79,7 +81,7 @@ class OrderController extends Controller
         $customer['phone'] = $request->phone;
         $customer['email'] = $request->email;
         $customer['address'] = $request->address;
-        $customer['note'] = $request->note;
+        $customer['note'] = clean($request->note);
         $customer['date'] = $request->date;
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
@@ -107,7 +109,8 @@ class OrderController extends Controller
         //
         $orderFindId = $this->orderObj->getOrderById($id);
         $product = $this->orderObj->getProductByIdOrder($id);
-        $orderProduct = $this->orderObj->getOrderProduct($id);
+        $orderProduct = $this->orderProductObj->getOrderProduct($id);
+        
         return response()->json(
             [
                 'orderData' => $orderFindId,
@@ -129,7 +132,7 @@ class OrderController extends Controller
         $order = $this->orderObj->getOrderById($id);
         $allproduct = $this->productObj->getAllProduct();
         $product = $this->orderObj->getProductByIdOrder($id);
-        $orderProduct = $this->orderObj->getProductOfOrder($id);
+        $orderProduct = $this->orderProductObj->getProductOfOrder($id);
 
         return view('order.edit')->with('order', $order)->with('allProduct', $allproduct)->with('orderProduct', $orderProduct);
     }
@@ -155,7 +158,7 @@ class OrderController extends Controller
         $customer['phone'] = $request->phone;
         $customer['email'] = $request->email;
         $customer['address'] = $request->address;
-        $customer['note'] = $request->note;
+        $customer['note'] = clean($request->note);
         $customer['date'] = $request->date;
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
@@ -165,7 +168,7 @@ class OrderController extends Controller
         } else {
             $customer['avatar'] = "";
         }
-        $this->orderObj->deleteOrderProduct($id);
+        $this->orderProductObj->deleteOrderProduct($id);
         $arrIdPro = $request->productIds;
         $arrPricePro = $request->prices;
         $arrQtyPro = $request->quantities;
@@ -184,6 +187,7 @@ class OrderController extends Controller
     {
         //
         $this->orderObj->deleteOrder($id);
+        $this->orderProductObj->deleteOrderProduct($id);
 
         return response()->json(['data' => 'remove'], 200);
     }

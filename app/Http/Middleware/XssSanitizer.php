@@ -15,7 +15,7 @@ class XssSanitizer
      */
     public function handle($request, Closure $next)
     {
-        $input = $request->all();
+        $input = $request->except(['note']);
 
         array_walk_recursive($input, function(&$input) {
 

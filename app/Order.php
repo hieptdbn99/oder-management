@@ -4,39 +4,34 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 class Order extends Model
 {
-    //
-
+    // Lấy khóa ngaoij vào bảng trung gian
     public function product()
     {
         return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
     }
+
+    // Lấy tất cả đơn hàng và phân trang
     public function getAllOrderPaginate()
     {
         return Order::orderBy('id', 'DESC')->paginate(4);
     }
+
+    //Lấy đơn hàng theo id
     public function getOrderById($id)
     {
         return Order::find($id);
     }
+
+    //Lấy sản phẩm theo id của đơn hàng
     public function getProductByIdOrder($id)
     {
         return Order::find($id)->product()->get();
-    }
-    public function getOrderProduct($id)
-    {
-        return DB::table('order_product')->where('order_id', $id)->get();
-    }
-    public function getProductOfOrder($id)
-    {
-        return DB::table('order_product')->where('order_product.order_id', $id)
-            ->join('products', 'order_product.product_id', '=', 'products.id')->get();
-    }
-    public function getEditProductOrder($order_id, $product_id)
-    {
-        return DB::table('order_product')->where('order_id', $order_id)->where('product_id', $product_id)->get();
-    }
+    } 
+    
+    //cập nhật đơn hàng
     public function updateOrder($id, $customer, $productIds, $price, $quantity)
     {
     
@@ -70,6 +65,8 @@ class Order extends Model
         $order->totalproduct = Order::find($id)->product()->sum('total_product');
         $order->save();
     }
+
+    // tạo mới đơn hàng
     public function storeOrder($customer, $productIds, $price, $quantity)
     {
         $this->namecustomer = $customer['namecustomer'];
@@ -100,15 +97,14 @@ class Order extends Model
         $this->totalproduct = Order::find($this->id)->product()->sum('total_product');
         $this->save();
     }
+
+    // xóa đơn hàng
     public function deleteOrder($id)
-    {
+    {   
         Order::find($id)->delete();
-        DB::table('order_product')->where('order_id', $id)->delete();
     }
-    public function deleteOrderProduct($id)
-    {
-        DB::table('order_product')->where('order_id', $id)->delete();
-    }
+
+    // tìm kiếm đơn hàng
     public function searchOrder($name){
         return Order::where('namecustomer','LIKE','%'.$name.'%')->paginate(4);
     }

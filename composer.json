@@ -12,6 +12,7 @@
         "algolia/algoliasearch-client-php": "^3.0",
         "botble/assets": "^1.0",
         "ckfinder/ckfinder-laravel-package": "v3.5.1.7",
+        "ezyang/htmlpurifier": "^4.13",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
@@ -19,6 +20,7 @@
         "laravel/scout": "^8.6",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.4",
+        "mews/purifier": "^3.3",
         "unisharp/laravel-filemanager": "^2.2"
     },
     "require-dev": {
