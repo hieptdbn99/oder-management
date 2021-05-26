@@ -12,6 +12,14 @@
   .error{
     color: rgb(196, 30, 30);
   }
+  .select-pr{
+    height: 1.8em;
+    padding: 0.1em;
+  }
+  .del{
+    height: 1.8em;
+    padding: 0.1em 0.5em;
+  }
  
   
   

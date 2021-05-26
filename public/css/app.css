@@ -1,4 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
+
+@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Nunito);
 
 /*!
  * Bootstrap v4.6.0 (https://getbootstrap.com/)
@@ -10941,4 +10943,28 @@ a.text-dark:focus {
     border-color: #dee2e6;
   }
 }
+
+
+*{
+  margin: 0;
+  padding: 0;
+}
+body{
+  font-family: 'Poppins', sans-serif;
+}
+label{
+  font-weight: bold;
+}
+.error{
+  color: rgb(196, 30, 30);
+}
+.select-pr{
+  height: 1.8em;
+  padding: 0.1em;
+}
+.del{
+  height: 1.8em;
+  padding: 0.1em 0.5em;
+}
+
 

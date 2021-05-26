@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('order', 'OrderController')->middleware('XssSanitizer');
+Route::resource('order', 'OrderController')->middleware('XssSanitizer')->middleware('auth');
 Route::post('order/search', 'OrderController@search')->name('order.search');
 Auth::routes(); 
 Route::get('/home', 'HomeController@index')->name('home');

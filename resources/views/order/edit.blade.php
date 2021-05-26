@@ -1,5 +1,5 @@
-@extends('layout.master')
-@section('order-management')
+@extends('layouts.app')
+@section('content')
     <div class="container">
         <div class="row">
             <h3 class="col-sm-12 mb-5">Sửa thông tin đơn hàng</h3>
@@ -32,7 +32,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <select name="productIds[]" class="form-control">
+                                                    <select name="productIds[]" class="form-control select-pr">
                                                         <option value="">Sản phẩm</option>
                                                         @foreach ($allProduct as $product)
                                                             <option value="{{ $product->id }}"
@@ -63,7 +63,7 @@
                                             <tr class="order-edit">
 
                                                 <td>
-                                                    <select name="productIds[]" class="form-control">
+                                                    <select name="productIds[]" class="form-control select-pr">
                                                         @foreach ($allProduct as $product)
                                                             <option value="{{ $product->id }}" @if ($product->id == $item->product_id) selected @endif>
                                                                 {{ $product->name }}
@@ -178,7 +178,7 @@
         <tbody class="hidden-tr d-none">
             <tr>
                 <td>
-                    <select name="productIds[]" class="form-control">
+                    <select name="productIds[]" class="form-control select-pr">
                         @foreach ($allProduct as $product)
                             <option value="{{ $product->id }}">
                                 {{ $product->name }}

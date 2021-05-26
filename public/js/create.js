@@ -83,7 +83,8 @@ var create = function() {
 
     var createOrder = function() {
         el.btnSubmit.submit(function(e) {
-            var formValues = $(this).serialize();
+            var formValues = $(this).serializeArray()
+            e.preventDefault();
             var url = $(this).attr("data-url");
             $.ajax({
                 headers: {
@@ -93,9 +94,11 @@ var create = function() {
                 type: "post",
                 url: url,
                 data: {
-                    data: formValues
+                    formData: formValues
                 },
-                success: function(response) {},
+                success: function(response) {
+                    console.log(response.data)
+                },
                 error: function(jqXHR, textStatus, errorThorwn) {}
             });
         });

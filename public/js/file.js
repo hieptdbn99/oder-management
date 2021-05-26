@@ -1,5 +1,4 @@
-CKEDITOR.replace( 'note', {
-                
+CKEDITOR.replace( 'note', {              
     filebrowserBrowseUrl     : "{{ route('ckfinder_browser') }}",
     filebrowserImageBrowseUrl: "{{ route('ckfinder_browser') }}?type=Images&token=123",
     filebrowserFlashBrowseUrl: "{{ route('ckfinder_browser') }}?type=Flash&token=123", 

@@ -1,5 +1,5 @@
-@extends('layout.master')
-@section('order-management')
+@extends('layouts.app')
+@section('content')
     @if (Session::has('successMsg'))
         <script type="text/javascript">
             alert({{ Session::get('successMsg') }});

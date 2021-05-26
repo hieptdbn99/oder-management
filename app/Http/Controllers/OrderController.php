@@ -31,7 +31,7 @@ class OrderController extends Controller
         $orders = $this->orderObj->getAllOrderPaginate();
         $products = $this->productObj->getAllProduct();
 
-        return view('order.list')->with('products', $products)->with('orders', $orders);
+        return view('order.list', compact('products','orders'));
     }
     public function search(Request $request)
     {
@@ -40,7 +40,7 @@ class OrderController extends Controller
             $products = $this->productObj->getAllProduct();
             $orders = $this->orderObj->searchOrder($request->search_name);
             
-            return view('order.list')->with('orders', $orders)->with('products', $products);
+            return view('order.list', compact('orders','products'));
         } else {
             return redirect()->route('order.index');
         }
@@ -56,7 +56,7 @@ class OrderController extends Controller
         //    
         $products = $this->productObj->getAllProduct();
 
-        return view('order.create')->with('products', $products);
+        return view('order.create', compact('products'));
     }
 
     /**
@@ -68,6 +68,10 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request['formData']['name'];
+        return response()->json(['data' => $data, 200]);
+
+        $request->flash();
         $request->validate([
             'name' => 'required',
             'email' => 'required|email:rfc,dns',
@@ -130,11 +134,11 @@ class OrderController extends Controller
     {
         //
         $order = $this->orderObj->getOrderById($id);
-        $allproduct = $this->productObj->getAllProduct();
+        $allProduct = $this->productObj->getAllProduct();
         $product = $this->orderObj->getProductByIdOrder($id);
         $orderProduct = $this->orderProductObj->getProductOfOrder($id);
 
-        return view('order.edit')->with('order', $order)->with('allProduct', $allproduct)->with('orderProduct', $orderProduct);
+        return view('order.edit', compact('order','allProduct','orderProduct'));
     }
     /**
      * Update the specified resource in storage.

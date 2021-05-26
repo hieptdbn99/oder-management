@@ -16,7 +16,7 @@ class Order extends Model
     // Lấy tất cả đơn hàng và phân trang
     public function getAllOrderPaginate()
     {
-        return Order::orderBy('id', 'DESC')->paginate(4);
+        return Order::orderBy('id', 'DESC')->paginate(10);
     }
 
     //Lấy đơn hàng theo id
@@ -106,6 +106,6 @@ class Order extends Model
 
     // tìm kiếm đơn hàng
     public function searchOrder($name){
-        return Order::where('namecustomer','LIKE','%'.$name.'%')->paginate(4);
+        return Order::where('namecustomer','LIKE','%'.$name.'%')->paginate(10);
     }
 }

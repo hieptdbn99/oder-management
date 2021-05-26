@@ -16,6 +16,9 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+                <div>
+                    <a href="{{ route('order.index') }}"><button class="btn btn-info">Quản lý đơn hàng</button></a>
+                </div>
             </div>
         </div>
     </div>
