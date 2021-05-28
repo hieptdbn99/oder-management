@@ -83,24 +83,40 @@ var create = function() {
 
     var createOrder = function() {
         el.btnSubmit.submit(function(e) {
-            var formValues = $(this).serializeArray()
             e.preventDefault();
-            var url = $(this).attr("data-url");
+            url = $(this).attr("data-url");
+            var form_data = new FormData(this);
+            var file_data = $("#input-avt").prop("files")[0];   
+            form_data.append("file", file_data);
+            var note = CKEDITOR.instances['note'].getData();
+            form_data.append("note", note);
             $.ajax({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                 },
-
                 type: "post",
-                url: url,
-                data: {
-                    formData: formValues
-                },
+                url: url, // <-- point to server-side PHP script
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+
                 success: function(response) {
-                    console.log(response.data)
+                  
+                        alert("Thêm mới đơn hàng thành công");
+                        window.location.replace(response);
+                   
                 },
-                error: function(jqXHR, textStatus, errorThorwn) {}
+                error: function(response) {
+                    $('#err-name-add').text(response.responseJSON.errors.name);
+                    $('#err-address-add').text(response.responseJSON.errors.address);
+                    $('#err-phone-add').text(response.responseJSON.errors.phone);
+                    $('#err-email-add').text(response.responseJSON.errors.email); 
+                    $('#err-date-add').text(response.responseJSON.errors.date);              
+             
+                }
             });
+            CKEDITOR.replace('note');
         });
     };
 };

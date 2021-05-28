@@ -31,7 +31,7 @@ class OrderController extends Controller
         $orders = $this->orderObj->getAllOrderPaginate();
         $products = $this->productObj->getAllProduct();
 
-        return view('order.list', compact('products','orders'));
+        return view('order.list', compact('products', 'orders'));
     }
     public function search(Request $request)
     {
@@ -39,8 +39,8 @@ class OrderController extends Controller
         if ($request->search_name != "") {
             $products = $this->productObj->getAllProduct();
             $orders = $this->orderObj->searchOrder($request->search_name);
-            
-            return view('order.list', compact('orders','products'));
+
+            return view('order.list', compact('orders', 'products'));
         } else {
             return redirect()->route('order.index');
         }
@@ -68,10 +68,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-        $data = $request['formData']['name'];
-        return response()->json(['data' => $data, 200]);
-
-        $request->flash();
+        // $data = $request->all();
+        // return response()->json(['data' => $data], 200);
         $request->validate([
             'name' => 'required',
             'email' => 'required|email:rfc,dns',
@@ -87,8 +85,8 @@ class OrderController extends Controller
         $customer['address'] = $request->address;
         $customer['note'] = clean($request->note);
         $customer['date'] = $request->date;
-        if ($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
+        if ($request->hasFile('file')) {
+            $file = $request->file;
             $file->move('uploads', $file->getClientOriginalName());
             $avatar = $file->getClientOriginalName();
             $customer['avatar'] = $avatar;
@@ -98,7 +96,7 @@ class OrderController extends Controller
         $arrQtyPro = $request->quantities;
         $this->orderObj->storeOrder($customer, $arrIdPro, $arrPricePro, $arrQtyPro);
 
-        return redirect()->route('order.index');
+        return route('order.index');
     }
 
 
@@ -114,7 +112,7 @@ class OrderController extends Controller
         $orderFindId = $this->orderObj->getOrderById($id);
         $product = $this->orderObj->getProductByIdOrder($id);
         $orderProduct = $this->orderProductObj->getOrderProduct($id);
-        
+
         return response()->json(
             [
                 'orderData' => $orderFindId,
@@ -138,7 +136,7 @@ class OrderController extends Controller
         $product = $this->orderObj->getProductByIdOrder($id);
         $orderProduct = $this->orderProductObj->getProductOfOrder($id);
 
-        return view('order.edit', compact('order','allProduct','orderProduct'));
+        return view('order.edit', compact('order', 'allProduct', 'orderProduct'));
     }
     /**
      * Update the specified resource in storage.
@@ -150,6 +148,7 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         //  
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|email:rfc,dns',
@@ -178,7 +177,7 @@ class OrderController extends Controller
         $arrQtyPro = $request->quantities;
         $this->orderObj->updateOrder($id, $customer, $arrIdPro, $arrPricePro, $arrQtyPro);
 
-        return redirect()->route('order.index');
+        return route('order.index');
     }
 
     /**

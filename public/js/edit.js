@@ -6,7 +6,7 @@ var edit = function() {
         this.bindEvent();
     };
     this.init = function() {
-        el.btnSubmitOrder = $("#form_edit_modal");
+        el.btnSubmitOrder = $("#form-edit-order");
         el.btnAddPro = $("#add_row");
     };
     this.bindEvent = function() {
@@ -81,23 +81,49 @@ var edit = function() {
     }
 
     var orderEditSubmit = function() {
-        el.btnSubmitOrder.click(function(e) {
-            var formValues = $(this).serialize();
-            var url = $(this).attr("data-url");
-            // $('.order-edit').remove();
+        el.btnSubmitOrder.submit(function(e) {
+            e.preventDefault();
+            url = $(this).attr("data-url");
+            var form_data = new FormData(this);
+            form_data.append('_method', 'put');
+            var file_data = $("#input-avatar-edit").prop("files")[0];
+            form_data.append("avatar", file_data);
+            var note = CKEDITOR.instances["text-edit-note"].getData();
+            console.log(file_data);
+            form_data.append("note", note);
             $.ajax({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                 },
-
-                type: "put",
+                type: "post",
                 url: url,
-                data: {
-                    data: formValues
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+
+                success: function(response) {
+                    alert("Sửa đơn hàng thành công");
+                    window.location.replace(response);
                 },
-                success: function(response) {},
-                error: function(jqXHR, textStatus, errorThorwn) {}
+                error: function(response) {
+                    $("#err-name-edit").text(response.responseJSON.errors.name);
+                    $("#err-avt-edit").text(
+                        response.responseJSON.errors.avatar
+                    );
+                    $("#err-address-edit").text(
+                        response.responseJSON.errors.address
+                    );
+                    $("#err-phone-edit").text(
+                        response.responseJSON.errors.phone
+                    );
+                    $("#err-email-edit").text(
+                        response.responseJSON.errors.email
+                    );
+                    $("#err-date-edit").text(response.responseJSON.errors.date);
+                }
             });
+            CKEDITOR.replace("text-edit-note");
         });
     };
 };

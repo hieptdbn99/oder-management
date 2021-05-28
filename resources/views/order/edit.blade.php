@@ -4,10 +4,9 @@
         <div class="row">
             <h3 class="col-sm-12 mb-5">Sửa thông tin đơn hàng</h3>
             <div class="form-edit col-sm-12">
-                <form action="{{ route('order.update', $order->id) }}" id="form_edit_modal"
-                    data-url="{{ route('order.update', $order->id) }}" enctype="multipart/form-data" method="post">
+                <form id="form-edit-order" data-url="{{ route('order.update', $order->id) }}"
+                    enctype="multipart/form-data">
                     @csrf
-                    @method('put')
                     <div class="form-group">
 
                         <label for="" class="d-block mb-3">
@@ -118,14 +117,12 @@
                         </label>
                         <input type="text" name="name" class="form-control" id="input-name-edit"
                             value="{{ $order->namecustomer }}">
-                        @error('name')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
+                        <div class="error" id="err-name-edit"></div>
                         <input type="hidden" name="idHidden" id="id_order" value="{{ $order->id }}">
                     </div>
                     <div class="form-group">
                         <label for="">Ảnh đại diện</label>
-                        <input type="file" name="avatar" class="form-control" id="input-arvatar-edit"
+                        <input type="file" name="avatar" class="form-control" id="input-avatar-edit"
                             value="{{ $order->avatar }}">
                         <img id="img-avatar-edit" class="w-25" src="{{ asset("uploads/$order->avatar") }}" alt="">
                     </div>
@@ -133,40 +130,30 @@
                         <label for="">Email</label>
                         <input type="email" name="email" class="form-control" id="input-email-edit"
                             value="{{ $order->email }}">
-                        @error('email')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
+                        <div class="error" id="err-email-edit"></div>
                     </div>
                     <div class="form-group">
                         <label for="">Số điện thoại</label>
                         <input type="text" name="phone" class="form-control" id="input-phone-edit"
                             value="{{ $order->phone }}">
-                        @error('phone')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
+                        <div class="error" id="err-phone-edit"></div>
                     </div>
                     <div class="form-group">
                         <label for="">Địa chỉ</label>
                         <input type="text" name="address" class="form-control" id="input-address-edit"
                             value="{{ $order->address }}">
                     </div>
-                    @error('address')
-                        <div class="error">{{ $message }}</div>
-                    @enderror
+                    <div class="error" id="err-address-edit"></div>
                     <div class="form-group">
                         <label for="">Ngày đặt hàng</label>
-                        <input type="date" name="date" value="{{ $order->date }}" class="form-control"
-                            id="input-date">
-                        @error('date')
-                            <div class="error">{{ $message }}</div>
-                        @enderror
+                        <input type="date" name="date" value="{{ $order->date }}" class="form-control" id="input-date">
+                        <div class="error" id="err-date-edit"></div>
                     </div>
                     <div class="form-group">
                         <label for="">Ghi chú</label>
-                        <textarea name="note" id="text_edit_note">{{ $order->note }}</textarea>
+                        <textarea name="text-edit-note" id="text-edit-note">{{ $order->note }}</textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary">Sửa</button>
                     </div>
                 </form>
@@ -205,5 +192,16 @@
         // "global" vars, built using blade
         var flagsUrl = '{{ URL::asset('order/updateproduct') }}';
 
+    </script>
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+    <script>
+        CKEDITOR.replace( 'text-edit-note', {              
+    filebrowserBrowseUrl     : "{{ route('ckfinder_browser') }}",
+    filebrowserImageBrowseUrl: "{{ route('ckfinder_browser') }}?type=Images&token=123",
+    filebrowserFlashBrowseUrl: "{{ route('ckfinder_browser') }}?type=Flash&token=123", 
+    filebrowserUploadUrl     : "{{ route('ckfinder_connector') }}?command=QuickUpload&type=Files", 
+    filebrowserImageUploadUrl: "{{ route('ckfinder_connector') }}?command=QuickUpload&type=Images",
+    filebrowserFlashUploadUrl: "{{ route('ckfinder_connector') }}?command=QuickUpload&type=Flash",
+} );
     </script>
 @endsection

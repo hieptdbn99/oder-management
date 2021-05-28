@@ -1,16 +1,16 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <div class="row pt-2 pb-2">
-            <div class="col-sm-12 mt-1">
+        <div class="row pt-3 pb-3">
+            <div class="col-sm-12 mt-">
                 <div class="title">
                     <h1>THÊM ĐƠN HÀNG</h1>
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
-            <form id="add-order-form" enctype="multipart/form-data"
-                data-url="{{ route('order.store') }}" method="post">
+        <div class="row">
+            <form id="add-order-form"
+                data-url="{{ route('order.store') }}" link="{{ route('order.index') }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-sm-12">
@@ -22,60 +22,51 @@
                                 <label for="">Họ và tên khách hàng</label>
                                 <input type="text" name="name" value="{{ old('name') }}" class="form-control"
                                     id="input-name">
-                                @error('name')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
+                             
+                                    <div id = "err-name-add" class="error"></div>
+                 
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="">Ảnh đại diện</label>
                                 <input type="file" name="avatar" value="{{ old('avatar') }}" class="form-control"
-                                    id="input-arvatar">
-                                @error('avatar')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
+                                    id="input-avt">
+                             
+                                    <div id = "err-avt-add" class="error"></div>
+                          
                             </div>
 
 
                             <div class="form-group col-sm-6">
                                 <label for="">Email</label>
-                                <input type="text" name="email" value="{{ old('email') }}" class="form-control"
+                                <input type="text" name="email" value="" class="form-control"
                                     id="input-email">
-                                @error('email')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
+                                    <div class="error" id = "err-email-add"></div>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="">Số điện thoại</label>
                                 <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
                                     id="input-phone">
-                                @error('phone')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
+                                    <div class="error" id = "err-phone-add"></div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <label for="">Địa chỉ</label>
                                 <input type="text" name="address" value="{{ old('address') }}" class="form-control"
                                     id="input-address">
-                                @error('address')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
+                                <div class="error" id = "err-address-add"></div>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="">Ngày đặt hàng</label>
                                 <input type="date" name="date" value="{{ old('date') }}" class="form-control"
-                                    id="input-date">
-                                @error('date')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
+                                    id="input-date">              
+                                    <div class="error" id = "err-date-add"></div>
                             </div>
                             <div class="col-sm-12">
-                                <label for="">Ghi chú</label>
-                                <textarea name="note" id="text"></textarea>
+                                <textarea name="note" id="note"></textarea>
                                 @include('ckfinder::setup')
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <div class="product mt-2 mb-2">
+                            <div class="product mt-3 mb-3">
                                 <h3>Sản phẩm</h3>
                             </div>
                             <div class="card-body">
@@ -182,6 +173,9 @@
 
         </tbody>
     </table>
+    
     <script src="{{ asset('js/create.js') }}"></script>
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/file.js') }}"></script>
 
 @endsection
