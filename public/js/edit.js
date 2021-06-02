@@ -19,7 +19,6 @@ var edit = function() {
     var createPro = function() {
         var sum = 0;
         el.btnAddPro.click(function(e) {
-            console.log("hello");
             e.preventDefault();
             $(".editProduct").append($(".hidden-tr").html());
             deletePro();
@@ -64,14 +63,12 @@ var edit = function() {
                 .parent()
                 .siblings(".td-totalEach")
                 .html(totalEachPrice);
-            // console.log($('.td-totalEach').html())
             totalPrice();
         });
     };
     function totalPrice() {
         sum = 0;
         var eachProduct = document.getElementsByClassName("td-totalEach");
-        console.log(eachProduct);
         for (var i = 0; i < eachProduct.length; i++) {
             if (!isNaN(parseInt(eachProduct[i].innerHTML))) {
                 sum += parseInt(eachProduct[i].innerHTML);
@@ -89,7 +86,6 @@ var edit = function() {
             var file_data = $("#input-avatar-edit").prop("files")[0];
             form_data.append("avatar", file_data);
             var note = CKEDITOR.instances["text-edit-note"].getData();
-            console.log(file_data);
             form_data.append("note", note);
             $.ajax({
                 headers: {

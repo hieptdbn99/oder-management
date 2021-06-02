@@ -24,7 +24,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::any('/ckfinder/connector', '\CKSource\CKFinderBridge\Controller\CKFinderController@requestAction')
     ->name('ckfinder_connector');
-
 Route::any('/ckfinder/browser', '\CKSource\CKFinderBridge\Controller\CKFinderController@browserAction')
     ->name('ckfinder_browser');
 

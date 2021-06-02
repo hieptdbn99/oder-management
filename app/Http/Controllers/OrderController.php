@@ -6,7 +6,8 @@ use App\Customer;
 use App\Order;
 use App\OrderProduct;
 use App\Product;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\Order\OrderInterface;
+use App\Repositories\Product\ProductInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -19,17 +20,20 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
+    protected $orderRepository,$productRepository;
+
+    public function __construct(OrderInterface $orderRepository,ProductInterface $productRepository)
     {
-        $this->orderObj = new Order();
-        $this->productObj = new Product();
+        $this->productRepository = $productRepository;
         $this->orderProductObj = new OrderProduct();
+        $this->orderRepository = $orderRepository;
+        $this->middleware('auth');
     }
     public function index()
     {
         //
-        $orders = $this->orderObj->getAllOrderPaginate();
-        $products = $this->productObj->getAllProduct();
+        $orders = $this->orderRepository->getAllOrderPaginate();
+        $products = $this->productRepository->getAllProduct();
 
         return view('order.list', compact('products', 'orders'));
     }
@@ -37,8 +41,8 @@ class OrderController extends Controller
     {
         // $orders = $this->orderObj->getAllOrderPaginate();
         if ($request->search_name != "") {
-            $products = $this->productObj->getAllProduct();
-            $orders = $this->orderObj->searchOrder($request->search_name);
+            $products = $this->productRepository->getAllProduct();
+            $orders = $this->orderRepository->searchOrder($request->search_name);
 
             return view('order.list', compact('orders', 'products'));
         } else {
@@ -54,7 +58,7 @@ class OrderController extends Controller
     public function create()
     {
         //    
-        $products = $this->productObj->getAllProduct();
+        $products = $this->productRepository->getAllProduct();
 
         return view('order.create', compact('products'));
     }
@@ -94,7 +98,7 @@ class OrderController extends Controller
         $arrIdPro = $request->productIds;
         $arrPricePro = $request->prices;
         $arrQtyPro = $request->quantities;
-        $this->orderObj->storeOrder($customer, $arrIdPro, $arrPricePro, $arrQtyPro);
+        $this->orderRepository->storeOrder($customer, $arrIdPro, $arrPricePro, $arrQtyPro);
 
         return route('order.index');
     }
@@ -109,8 +113,8 @@ class OrderController extends Controller
     public function show($id)
     {
         //
-        $orderFindId = $this->orderObj->getOrderById($id);
-        $product = $this->orderObj->getProductByIdOrder($id);
+        $orderFindId = $this->orderRepository->getOrderById($id);
+        $product = $this->orderRepository->getProductByIdOrder($id);
         $orderProduct = $this->orderProductObj->getOrderProduct($id);
 
         return response()->json(
@@ -131,9 +135,9 @@ class OrderController extends Controller
     public function edit($id)
     {
         //
-        $order = $this->orderObj->getOrderById($id);
-        $allProduct = $this->productObj->getAllProduct();
-        $product = $this->orderObj->getProductByIdOrder($id);
+        $order = $this->orderRepository->getOrderById($id);
+        $allProduct = $this->productRepository->getAllProduct();
+        $product = $this->orderRepository->getProductByIdOrder($id);
         $orderProduct = $this->orderProductObj->getProductOfOrder($id);
 
         return view('order.edit', compact('order', 'allProduct', 'orderProduct'));
@@ -175,7 +179,7 @@ class OrderController extends Controller
         $arrIdPro = $request->productIds;
         $arrPricePro = $request->prices;
         $arrQtyPro = $request->quantities;
-        $this->orderObj->updateOrder($id, $customer, $arrIdPro, $arrPricePro, $arrQtyPro);
+        $this->orderRepository->updateOrder($id, $customer, $arrIdPro, $arrPricePro, $arrQtyPro);
 
         return route('order.index');
     }
@@ -189,7 +193,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
-        $this->orderObj->deleteOrder($id);
+        $this->orderRepository->deleteOrder($id);
         $this->orderProductObj->deleteOrderProduct($id);
 
         return response()->json(['data' => 'remove'], 200);

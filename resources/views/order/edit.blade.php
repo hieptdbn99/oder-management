@@ -83,10 +83,6 @@
                                                 <td> <input type="button" class="del btn btn-danger" value="Delete" /></td>
 
                                                 </td>
-
-
-
-
                                             </tr>
                                         @endforeach
                                     @endif
