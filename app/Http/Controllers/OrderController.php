@@ -91,8 +91,8 @@ class OrderController extends Controller
         $customer['date'] = $request->date;
         if ($request->hasFile('file')) {
             $file = $request->file;
-            $file->move('uploads', $file->getClientOriginalName());
-            $avatar = $file->getClientOriginalName();
+            // $file->move('uploads', $file->getClientOriginalName());
+            $avatar = $file->store('uploads','public');
             $customer['avatar'] = $avatar;
         }
         $arrIdPro = $request->productIds;
@@ -168,9 +168,9 @@ class OrderController extends Controller
         $customer['note'] = clean($request->note);
         $customer['date'] = $request->date;
         if ($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
-            $file->move('uploads', $file->getClientOriginalName());
-            $avatar = $file->getClientOriginalName();
+            $file = $request->file;
+            // $file->move('uploads', $file->getClientOriginalName());
+            $avatar = $file->store('uploads','public');
             $customer['avatar'] = $avatar;
         } else {
             $customer['avatar'] = "";

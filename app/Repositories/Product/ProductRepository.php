@@ -12,7 +12,7 @@ class ProductRepository implements ProductInterface
     }
     public function getProductById($id)
     {
-        return Product::find($id);
+        return Product::findOrFail($id);
     }
     public function getProductByName($name)
     {

@@ -120,7 +120,7 @@
                         <label for="">Ảnh đại diện</label>
                         <input type="file" name="avatar" class="form-control" id="input-avatar-edit"
                             value="{{ $order->avatar }}">
-                        <img id="img-avatar-edit" class="w-25" src="{{ asset("uploads/$order->avatar") }}" alt="">
+                        <img id="img-avatar-edit" class="w-25" src="{{ asset("storage/$order->avatar") }}" alt="">
                     </div>
                     <div class="form-group">
                         <label for="">Email</label>

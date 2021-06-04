@@ -18,20 +18,20 @@ class OrderRepository implements OrderInterface {
     //Lấy đơn hàng theo id
     public function getOrderById($id)
     {
-        return Order::find($id);
+        return Order::findOrFail($id);
     }
 
     //Lấy sản phẩm theo id của đơn hàng
     public function getProductByIdOrder($id)
     {
-        return Order::find($id)->product()->get();
+        return Order::findOrFail($id)->product()->get();
     } 
     
     //cập nhật đơn hàng
     public function updateOrder($id, $customer, $productIds, $price, $quantity)
     {
     
-        $order = Order::find($id);
+        $order = Order::findOrFail($id);
         $order->namecustomer = $customer['namecustomer'];
         if ($customer['avatar'] != "") {
             $order->avatar =  $customer['avatar'];
@@ -46,7 +46,7 @@ class OrderRepository implements OrderInterface {
         $arrPricePro = $price;
         $arrQtyPro = $quantity;
         for ($i = 0; $i < count($arrIdPro); $i++) {
-            $productDB =   Product::find($arrIdPro[$i]);
+            $productDB =   Product::findOrFail($arrIdPro[$i]);
             $totalPrice =   intval($arrQtyPro[$i]) * intval($arrPricePro[$i]);
             $order->product()->attach(
                 $productDB,
@@ -57,8 +57,8 @@ class OrderRepository implements OrderInterface {
                 ]
             );
         }
-        $order->totalprice = Order::find($id)->product()->sum('total_price');
-        $order->totalproduct = Order::find($id)->product()->sum('total_product');
+        $order->totalprice = Order::findOrFail($id)->product()->sum('total_price');
+        $order->totalproduct = Order::findOrFail($id)->product()->sum('total_product');
         $order->save();
     }
 
@@ -79,7 +79,7 @@ class OrderRepository implements OrderInterface {
         $arrQtyPro = $quantity;
 
         for ($i = 0; $i < count($arrIdPro); $i++) {
-            $productDB =   Product::find($arrIdPro[$i]);
+            $productDB =   Product::findOrFail($arrIdPro[$i]);
             $totalPrice =   intval($arrQtyPro[$i]) * intval($arrPricePro[$i]);
             $order->product()->attach(
                 $productDB,
@@ -90,15 +90,15 @@ class OrderRepository implements OrderInterface {
                 ]
             );
         }
-        $order->totalprice = Order::find($order->id)->product()->sum('total_price');
-        $order->totalproduct = Order::find($order->id)->product()->sum('total_product');
+        $order->totalprice = Order::findOrFail($order->id)->product()->sum('total_price');
+        $order->totalproduct = Order::findOrFail($order->id)->product()->sum('total_product');
         $order->save();
     }
 
     // xóa đơn hàng
     public function deleteOrder($id)
     {   
-        Order::find($id)->delete();
+        Order::findOrFail($id)->delete();
     }
 
     // tìm kiếm đơn hàng

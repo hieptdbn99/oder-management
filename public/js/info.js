@@ -28,7 +28,7 @@ var info = function() {
                     $("#info_name").html(respone.orderData.namecustomer);
                     $("#info_avatar").attr(
                         "src",
-                        "../uploads/" + respone.orderData.avatar
+                        "/storage/" + respone.orderData.avatar
                     );
                     $("#info_email").html(respone.orderData.email);
                     $("#info_phone").html(respone.orderData.phone);
